@@ -14,6 +14,7 @@
 #       root directory of scripts are.
 
 DEVTOOLS_CACHE_FILE=$DEVTOOLS_BASEPATH/.cache_namespace
+DEVTOOLS_GLOBAL_NAMESPACE="DEVTOOLS_TEMP_"
 
 function clear_cache() {
     if [[ -f $DEVTOOLS_CACHE_FILE ]]; then
@@ -101,19 +102,33 @@ function call() {
     local FUNCTION_NAME=`echo "$1" | tr "." "_"`
     shift
 
-    # Convenience functionality: if you're calling a file, just try to call it's main().
+    # Modular functionality: if you're calling a file, just try to call it's main().
     if [[ -f $FILEPATH ]]; then
-        local FUNCTION_NAME="$FUNCTION_NAME"_main
+        # If there are any configurations, (stored in function `config`), call it first.
+        if [[ `declare -F | grep "$FUNCTION_NAME"_config` != "" ]]; then
+            "$FUNCTION_NAME"_config
+        fi
+
+        "$FUNCTION_NAME"_main "$@"
+
+        # Call the destructor, if declared (which it should be, if config is declared)
+        # TODO: I wonder whether this can be automated (don't need destructor), or even
+        #       whether I should.
+        if [[ `declare -F | grep "$FUNCTION_NAME"_destructor` != "" ]]; then
+            "$FUNCTION_NAME"_destructor
+        fi
+
+    else
+        $FUNCTION_NAME "$@"
     fi
 
-    $FUNCTION_NAME "$@"
 }
 
 function run() {
     # Usage: run <bash cmd>
     # Prints bash command for debugging, if VERBOSE_MODE is set. 
 
-    if [[ $# != 1 ]]; then
+    if [[ $# != 1 ]] && [[ $# != 2 ]]; then
         echo "Wrong use of run."
         return          # TODO: Change to exit
     fi
