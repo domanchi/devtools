@@ -2,14 +2,15 @@
 # Provides common flags for reuse.
 
 function main() {
-    # Usage: common.options <filename> "$@"
-    if [[ $# < 1 ]]; then
+    # Usage: common.options <filename> <retval_variable> "$@"
+    # If retval_variable is set to true, the program will end.
+    if [[ $# < 2 ]]; then
         echo "Wrong usage of common.options."
         return          # TODO: Change to exit
     fi
 
     VERBOSE_MODE=false
-    FILENAME=`echo "$1" | tr "." "_"`
+    local FILENAME=`echo "$1" | tr "." "_"`
     shift
 
     # getopt process.
@@ -20,6 +21,7 @@ function main() {
         case $opt in
             h)
                 "$FILENAME"_usage
+                eval $2=1
                 return
                 ;;
 
