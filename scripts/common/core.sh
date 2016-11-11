@@ -1,9 +1,16 @@
 #!/bin/bash
 # This creates pseudo namespaces by altering each function with filename prefixes.
 # Eg.
+#	# This imports common/core.sh
 #       import common.core
+#
+#       # This calls the function clear_cache specifically within common/core.sh
 #       call common.core.clear_cache
-# Needs global variable $BASEPATH to indicate where the root directory of scripts are.
+#
+#	# This calls the main() function within common.core.
+#	call common.core
+#
+# NOTE: Needs global variable $BASEPATH to indicate where the root directory of scripts are.
 
 CACHE_FILE=$BASEPATH/.cache_namespace
 

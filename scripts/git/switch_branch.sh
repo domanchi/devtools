@@ -9,12 +9,9 @@ function usage() {
 }
 
 function main() {
-    call common.options switch_branch "$@"
+    call common.options git.switch_branch "$@"
 
     if [[ $# == 0 ]]; then
-        #print_usage
-        #echo "";
-
         echo "These are the branches you can switch to:"
         git branch
     elif [[ $# == 1 ]]; then

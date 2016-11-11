@@ -9,7 +9,7 @@ function main() {
     fi
 
     VERBOSE_MODE=false
-    FILENAME=$1
+    FILENAME=`echo "$1" | tr "." "_"`
     shift
 
     # getopt process.

@@ -33,3 +33,10 @@ Within your `~/.bash_profile`, include the following line:
 
 You may need to `chmod +x scripts/main.sh` in order to make it work. Also, you can configure the features/functionality you
 want within main.sh.
+
+For adding additional modules, I have used the following conventions:
+- All functions need to be declared as `function function_name()` rather than just `function_name()`
+- All modules should have two functions, `usage()` and `main()`. Usage will print a user-friendly message on how to use
+the script, and main will be called automatically when you refer to the filename with `call` (unless you want to specifically
+refer to the function you want to call within that namespace). For more information, see [/scripts/common/core.sh]
+(https://github.com/domanchi/devtools/blob/master/scripts/common/core.sh)
