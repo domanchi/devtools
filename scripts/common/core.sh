@@ -32,8 +32,17 @@ function import() {
     fi
 
     # Convert relative_path_to_file to relative path
-    local FILEPATH=$BASEPATH/`echo "$1" | tr "." "/"`.sh
+    local FILEPATH=$BASEPATH/`echo "$1" | tr "." "/"`
 
+    # Check to see if folder. If so, import everything in that folder.
+    if [[ -d "$FILEPATH" ]]; then
+        ls $FILEPATH | while read -r line; do
+            import $1.${line%.*}
+        done
+        return
+    fi
+
+    local FILEPATH=$FILEPATH.sh
     if [[ ! -f $FILEPATH ]]; then
         echo "$FILEPATH does not exist."
     fi
@@ -45,10 +54,9 @@ function import() {
 
     # Determine whether file is already imported, and if so, ignore.
     local PREFIX=`echo "$1" | tr "." "_"`_
-    local ALREADY_IMPORTED=`cat $FILEPATH | grep $PREFIX`
+    local ALREADY_IMPORTED=`grep "$PREFIX" "$CACHE_FILE"`
 
-    # TODO: My hunch is that this doesn't currently work...
-    if [[ $ALREADY_IMPORTED != "" ]]; then
+    if [[ "$ALREADY_IMPORTED" != "" ]]; then
         log "$FILEPATH already imported!"
         return
     fi
@@ -58,11 +66,25 @@ function import() {
         $line
     done
 
-    # Prefix functions, and output (excluding first line)
+    # Prefix functions, and output (excluding first line, and imports)
     # NOTE: This is how to use sed with regex
-    run 'tail -n +2 $FILEPATH | sed "/import/d" | sed -e "s/function \([A-Za-z]\)/function $PREFIX\1/g" >> $CACHE_FILE'
+    local OUTPUT=`tail -n +2 $FILEPATH | sed "/import/d"`
+
+    # Rename all local function calls to new namespace
+    # NOTE: This is how to do a while loop by keeping it in main shell instance
+    while read -r line; do
+        local FUNCTION_NAME=`echo $line | cut -d ' ' -f 2`
+        local FUNCTION_NAME=${FUNCTION_NAME%"()"}       # remove trailing ()
+        local OUTPUT=`echo "$OUTPUT" | \
+            sed "s/function $FUNCTION_NAME/function FLUBFLUBFLUB/g; \
+                 s/$FUNCTION_NAME/call $(echo "$PREFIX$FUNCTION_NAME" | tr "_" ".")/g; \
+                 s/FLUBFLUBFLUB/$PREFIX$FUNCTION_NAME/g"`
+    done <<< "$(echo "$OUTPUT" | grep "function")"
+
+    run 'echo "$OUTPUT" >> $CACHE_FILE'
 
     . $CACHE_FILE       # finally import file
+    log "Imported $FILEPATH"
 }
 
 function call() {
@@ -80,7 +102,7 @@ function call() {
 
     # Convenience functionality: if you're calling a file, just try to call it's main().
     if [[ -f $FILEPATH ]]; then
-        FUNCTION_NAME="$FUNCTION_NAME"_main
+        local FUNCTION_NAME="$FUNCTION_NAME"_main
     fi
 
     $FUNCTION_NAME "$@"
