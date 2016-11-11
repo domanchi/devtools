@@ -22,7 +22,7 @@ as needed. For more information, see [/scripts/main.sh] (https://github.com/doma
 
 ### Installation
 #### /configs
-Just override your existing config files with these ones. 'nuf said.
+Just override (or merge) your existing config files with these ones. 'nuf said.
 
 #### /scripts
 Within your `~/.bash_profile`, include the following line:
