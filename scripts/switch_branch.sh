@@ -1,12 +1,16 @@
 #!/bin/bash
+import common.options
 
-switch_branch_print_usage() {
-    echo -e "switch_branch (sb) allows quick movement between git branches, for overly long branch names.";
-    echo -e "Usage: sb (<QUERY>)";
-    echo -e "QUERY is an optional parameter, that greps the branch name to switch to."
+function usage() {
+    echo "switch_branch (sb) allows quick movement between git branches, for overly long branch names.";
+    echo "Usage: sb (<query>)";
+    echo "  query is an optional parameter, that greps the branch name to switch to."
+    echo "  When run without parameters, switch_branch will list the branches that can be switched to."
 }
 
-switch_branch_parser() {
+function main() {
+    call common.options switch_branch "$@"
+
     if [[ $# == 0 ]]; then
         #print_usage
         #echo "";
@@ -15,7 +19,7 @@ switch_branch_parser() {
         git branch
     elif [[ $# == 1 ]]; then
         # Switch branch based on search query
-        BRANCH=`git branch | grep "$1"`
+        local BRANCH=`git branch | grep "$1"`
         if [[ $BRANCH = "" ]]; then
             echo "No git branch found with that query."
         elif [[ $(echo $BRANCH | wc -w) -gt 1 ]]; then
