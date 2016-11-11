@@ -9,7 +9,8 @@ function usage() {
 }
 
 function main() {
-    call common.options git.switch_branch "$@"
+    # Don't need if statement, because [[ $# == 0 ]] already handles it.
+    call common.options git.switch_branch retval "$@"
 
     if [[ $# == 0 ]]; then
         echo "These are the branches you can switch to:"
