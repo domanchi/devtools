@@ -1,0 +1,4 @@
+[format]
+    pretty = oneline
+[log]
+    decorate = true
