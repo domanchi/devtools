@@ -10,13 +10,14 @@
 #	# This calls the main() function within common.core.
 #	call common.core
 #
-# NOTE: Needs global variable $BASEPATH to indicate where the root directory of scripts are.
+# NOTE: Needs global variable $DEVTOOLS_BASEPATH to indicate where the
+#       root directory of scripts are.
 
-CACHE_FILE=$BASEPATH/.cache_namespace
+DEVTOOLS_CACHE_FILE=$DEVTOOLS_BASEPATH/.cache_namespace
 
 function clear_cache() {
-    if [[ -f $CACHE_FILE ]]; then
-        rm $CACHE_FILE
+    if [[ -f $DEVTOOLS_CACHE_FILE ]]; then
+        rm $DEVTOOLS_CACHE_FILE
     fi
 }
 
@@ -32,13 +33,13 @@ function import() {
     fi
 
     # Convert relative_path_to_file to relative path
-    local FILEPATH=$BASEPATH/`echo "$1" | tr "." "/"`
+    local FILEPATH=$DEVTOOLS_BASEPATH/`echo "$1" | tr "." "/"`
 
     # Check to see if folder. If so, import everything in that folder.
     if [[ -d "$FILEPATH" ]]; then
-        ls $FILEPATH | while read -r line; do
+        while read -r line; do
             import $1.${line%.*}
-        done
+        done <<< $(ls "$FILEPATH")
         return
     fi
 
@@ -48,13 +49,13 @@ function import() {
     fi
 
     # If file doesn't exist, create it.
-    if [[ ! -f $CACHE_FILE ]]; then
-        echo "#!/bin/bash" > $CACHE_FILE
+    if [[ ! -f $DEVTOOLS_CACHE_FILE ]]; then
+        echo "#!/bin/bash" > $DEVTOOLS_CACHE_FILE
     fi
 
     # Determine whether file is already imported, and if so, ignore.
     local PREFIX=`echo "$1" | tr "." "_"`_
-    local ALREADY_IMPORTED=`grep "$PREFIX" "$CACHE_FILE"`
+    local ALREADY_IMPORTED=`grep "$PREFIX" "$DEVTOOLS_CACHE_FILE"`
 
     if [[ "$ALREADY_IMPORTED" != "" ]]; then
         log "$FILEPATH already imported!"
@@ -62,9 +63,9 @@ function import() {
     fi
 
     # Recursively import all files needed
-    grep "import" $FILEPATH | while read -r line; do
+    while read -r line; do
         $line
-    done
+    done <<< $(grep "import" "$FILEPATH")
 
     # Prefix functions, and output (excluding first line, and imports)
     # NOTE: This is how to use sed with regex
@@ -81,9 +82,9 @@ function import() {
                  s/FLUBFLUBFLUB/$PREFIX$FUNCTION_NAME/g"`
     done <<< "$(echo "$OUTPUT" | grep "function")"
 
-    run 'echo "$OUTPUT" >> $CACHE_FILE'
+    run 'echo "$OUTPUT" >> $DEVTOOLS_CACHE_FILE'
 
-    . $CACHE_FILE       # finally import file
+    . $DEVTOOLS_CACHE_FILE       # finally import file
     log "Imported $FILEPATH"
 }
 
@@ -96,7 +97,7 @@ function call() {
         return          # TODO: Change to exit
     fi
 
-    local FILEPATH=$BASEPATH/`echo "$1" | tr "." "/"`.sh
+    local FILEPATH=$DEVTOOLS_BASEPATH/`echo "$1" | tr "." "/"`.sh
     local FUNCTION_NAME=`echo "$1" | tr "." "_"`
     shift
 

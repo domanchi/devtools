@@ -13,8 +13,10 @@ function main() {
     shift
 
     # getopt process.
+    # NOTE: Trailing : indicates to ignore any errors from this getopts, because
+    #       inputs can be passed onto the next getopts function.
     OPTIND=1    # reset to beginning
-    while getopts "hv" opt; do
+    while getopts ":hv" opt; do
         case $opt in
             h)
                 "$FILENAME"_usage
