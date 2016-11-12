@@ -50,8 +50,7 @@ function main() {
                 ;;
 
             h)
-                "$FILENAME"_usage
-                eval $2=true
+                usage
                 return
                 ;;
 
