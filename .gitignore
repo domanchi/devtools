@@ -1,4 +1,7 @@
 *.swp
 *.swo
 
+scripts/midkit
+
 .cache_namespace
+.secrets

@@ -1,5 +1,5 @@
 #!/bin/bash
-import common.options
+# Automated phpcleaner, based off .phpcs.xml
 
 function usage() {
     echo "Usage:"
