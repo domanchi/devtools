@@ -12,3 +12,4 @@ alias sb='call git.switch_branch "$@"'
 
 import php
 alias phpclean='call php.phpclean "$@"'
+alias stest='call php.phpunit "$@"'
