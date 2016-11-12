@@ -39,8 +39,8 @@ function import() {
     # Check to see if folder. If so, import everything in that folder.
     if [[ -d "$FILEPATH" ]]; then
         while read -r line; do
-            import $1.${line%.*}
-        done <<< $(ls "$FILEPATH")
+            import $1.${line%".sh"}
+        done <<< "$(ls "$FILEPATH")"
         return
     fi
 
@@ -66,7 +66,7 @@ function import() {
     # Recursively import all files needed
     while read -r line; do
         $line
-    done <<< $(grep "import" "$FILEPATH")
+    done <<< "$(grep "import" "$FILEPATH")"
 
     # Prefix functions, and output (excluding first line, and imports)
     # NOTE: This is how to use sed with regex
@@ -81,9 +81,9 @@ function import() {
             sed "s/function $FUNCTION_NAME/function FLUBFLUBFLUB/g; \
                  s/$FUNCTION_NAME/call $(echo "$PREFIX$FUNCTION_NAME" | tr "_" ".")/g; \
                  s/FLUBFLUBFLUB/$PREFIX$FUNCTION_NAME/g"`
-    done <<< "$(echo "$OUTPUT" | grep "function")"
+    done <<< "$(echo "$OUTPUT" | grep "^function [a-zA-Z]\(\)")"
 
-    run 'echo "$OUTPUT" >> $DEVTOOLS_CACHE_FILE'
+    run 'echo "${OUTPUT}" >> $DEVTOOLS_CACHE_FILE'
 
     . $DEVTOOLS_CACHE_FILE       # finally import file
     log "Imported $FILEPATH"
@@ -127,6 +127,7 @@ function call() {
 function run() {
     # Usage: run <bash cmd>
     # Prints bash command for debugging, if VERBOSE_MODE is set. 
+    # NOTE: This will run in a subshell. There's no other way around it (that I currently know of)
 
     if [[ $# != 1 ]] && [[ $# != 2 ]]; then
         echo "Wrong use of run."

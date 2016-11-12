@@ -27,11 +27,6 @@ function main() {
     local COMMIT_MESSAGE=""
     local ARGS=("$@")
     local FILEMODE=false
-
-    call common.options php.phpclean "$@" retval
-    if [[ $retval ]]; then
-        return
-    fi
     
     if [[ ! -f $(pwd)/"$DEVTOOLS_PHPCBF_LOCATION" ]] || [[ ! -f $(pwd)/"$DEVTOOLS_PHPCS_LOCATION" ]]; then
         echo "Cannot find phpcbf. Are you sure you're in the right directory?"
@@ -47,12 +42,9 @@ function main() {
                 ;;
 
             \?)
+                echo "Unknown flag."
                 usage
                 return
-                ;;
-
-            v)
-                local VERBOSE_MODE=true 
                 ;;
 
             m)
@@ -67,6 +59,16 @@ function main() {
                     local FILELIST_GENERATOR[0]="echo ${ARGS[$OPTIND-2]}" 
                 fi
                 local FILEMODE=true
+                ;;
+
+            h)
+                "$FILENAME"_usage
+                eval $2=true
+                return
+                ;;
+
+            v)
+                VERBOSE_MODE=true 
                 ;;
         esac
     done
