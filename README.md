@@ -40,3 +40,4 @@ For adding additional modules, I have used the following conventions:
 the script, and main will be called automatically when you refer to the filename with `call` (unless you want to specifically
 refer to the function you want to call within that namespace). For more information, see [/scripts/common/core.sh]
 (https://github.com/domanchi/devtools/blob/master/scripts/common/core.sh)
+- Modules may require locally defined GLOBAL variables (because bash doesn't pass variables around very well). These can be defined in `config()` and unset in `destructor()`, and `call()` will automatically call these constructor/destructors.
