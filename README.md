@@ -6,6 +6,14 @@
 This is a collection of tools that I use to become more effective in my job. Though mainly for personal use,
 please feel free to borrow, edit or improve my scripts to tailor it to your own workflow.
 
+### Tools
+Tools include:
+- git/submodule : update a git submodule
+- git/switch_branch : an efficient way to switch git branches with long names.
+- mac/app_interface : (Mac specific) interact with various applications on command line.
+- php/phpclean : use phpcbf to clean to-be-committed php files, so that it will comply with style-guide.
+- php/phpunit : easily run single tests with phpunit.
+
 ### Layout
 #### /configs
 These configuration files are abridged saved copies of keyboard shortcuts and preferences I use for my favorite applications.
