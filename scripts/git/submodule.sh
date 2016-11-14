@@ -1,14 +1,14 @@
 #!/bin/bash
 import common.options
 
-function usage() {
+function _usage() {
     echo "git.submodule allows automated updating of a submodule.";
     echo "Usage: git.submodule <path_to_submodule> (<hash>)";
     echo "  <hash> is an optional parameter, referring to the hash you want to checkout."
     echo "  If this isn't provided, it will default to HEAD."
 }
 
-function main() {
+function _main() {
     # Don't need if statement, because [[ $# == 0 ]] already handles it.
     call common.options git.switch_branch retval "$@"
 

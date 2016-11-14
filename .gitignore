@@ -2,6 +2,7 @@
 *.swo
 
 scripts/midkit
+private_main.sh
 
 .cache_namespace
 .secrets

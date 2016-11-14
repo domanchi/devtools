@@ -1,7 +1,8 @@
 #!/bin/bash
 # Automated phpcleaner, based off .phpcs.xml
+# Best used with pre-commit (http://pre-commit.com/) that checks for .phpcs style guide.
 
-function usage() {
+function _usage() {
     echo "Usage:"
     echo "  -a: performs phpclean on all tracked (staged + unstaged) files."
     echo "  -f: performs phpclean on specified filename"
@@ -9,19 +10,19 @@ function usage() {
     echo "  -h: shows this help message."
 }
 
-function config() {
+function _config() {
     # Edit these configuration values, if necessary
     DEVTOOLS_PHPCBF_LOCATION="vendor/bin/phpcbf"        # default to cleaning only if in project root
     DEVTOOLS_PHPCS_LOCATION=".phpcs.xml"
 }
 
-function destructor() {
+function _destructor() {
     # Remove all variables declared in config.
     unset DEVTOOLS_PHPCBF_LOCATION
     unset DEVTOOLS_PHPCS_LOCATION
 }
 
-function main() {    
+function _main() {    
     # Set initial flag values
     local FILELIST_GENERATOR=("git diff --stat --cached --name-only")
     local COMMIT_MESSAGE=""

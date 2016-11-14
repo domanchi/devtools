@@ -1,7 +1,5 @@
 #!/bin/bash
-import common.options
-
-function usage() {
+function _usage() {
     echo "Usage: stest [-tf] <path_to_test>"
     echo "Will execute single test in $DEVTOOLS_PHPUNIT_DEFAULT_TEST_FOLDER/<path_to_test>"
     echo "Flags:"
@@ -12,18 +10,18 @@ function usage() {
     echo "  * If your function relies on send_mess(), for some reason, this won't work with single tests."
 }
 
-function config() {
+function _config() {
     # This runs in the docker env, so be sure to configure the path to fit that.
     DEVTOOLS_PHPUNIT_LOCATION="./vendor/phpunit/phpunit/phpunit"
     DEVTOOLS_PHPUNIT_DEFAULT_TEST_FOLDER="./tests/integration/_sites"
 }
 
-function destructor() {
+function _destructor() {
     unset DEVTOOLS_PHPUNIT_LOCATION
     unset DEVTOOLS_PHPUNIT_DEFAULT_TEST_FOLDER
 }
 
-function main() {
+function _main() {
     if [[ $# = 0 ]]; then
         usage
         return

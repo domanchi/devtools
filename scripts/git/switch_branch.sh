@@ -1,5 +1,5 @@
 #!/bin/bash
-function usage() {
+function _usage() {
     echo "switch_branch (sb) allows quick movement between git branches, for overly long branch names.";
     echo "Usage: sb [-f] (<query>)";
     echo "  query is an optional parameter, that greps the branch name to switch to."
@@ -10,7 +10,7 @@ function usage() {
     echo "  -h : shows this message"
 }
 
-function main() {
+function _main() {
     local FORCE_FLAG=false
 
     # getopt process.

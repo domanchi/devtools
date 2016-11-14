@@ -1,7 +1,7 @@
 #!/bin/bash
 # Provides common flags for reuse.
 
-function main() {
+function _main() {
     # Usage: common.options <filename> <retval_variable> "$@"
     # If retval_variable is set to true, the program will end.
     # NOTE: Cannot use more than one getopts function in a single run.
@@ -21,7 +21,7 @@ function main() {
     while getopts "hv" opt; do
         case $opt in
             h)
-                "$FILENAME"_usage
+                "$FILENAME"__usage
                 eval $2=true
                 return
                 ;;

@@ -69,7 +69,6 @@ function import() {
     done <<< "$(grep "import" "$FILEPATH")"
 
     # Prefix functions, and output (excluding first line, and imports)
-    # NOTE: This is how to use sed with regex
     local OUTPUT=`tail -n +2 $FILEPATH | sed "/import/d"`
 
     # Rename all local function calls to new namespace
@@ -81,7 +80,7 @@ function import() {
             sed "s/function $FUNCTION_NAME/function FLUBFLUBFLUB/g; \
                  s/$FUNCTION_NAME/call $(echo "$PREFIX$FUNCTION_NAME" | tr "_" ".")/g; \
                  s/FLUBFLUBFLUB/$PREFIX$FUNCTION_NAME/g"`
-    done <<< "$(echo "$OUTPUT" | grep "^function [a-zA-Z]\(\)")"
+    done <<< "$(echo "$OUTPUT" | grep "^function [a-zA-Z_]\(\)")"
 
     run 'echo "${OUTPUT}" >> $DEVTOOLS_CACHE_FILE'
 
@@ -102,20 +101,20 @@ function call() {
     local FUNCTION_NAME=`echo "$1" | tr "." "_"`
     shift
 
-    # Modular functionality: if you're calling a file, just try to call it's main().
+    # Modular functionality: if you're calling a file, just try to call it's _main().
     if [[ -f $FILEPATH ]]; then
         # If there are any configurations, (stored in function `config`), call it first.
         if [[ `declare -F | grep "$FUNCTION_NAME"_config` != "" ]]; then
-            "$FUNCTION_NAME"_config
+            "$FUNCTION_NAME"__config
         fi
 
-        "$FUNCTION_NAME"_main "$@"
+        "$FUNCTION_NAME"__main "$@"
 
         # Call the destructor, if declared (which it should be, if config is declared)
         # TODO: I wonder whether this can be automated (don't need destructor), or even
         #       whether I should.
         if [[ `declare -F | grep "$FUNCTION_NAME"_destructor` != "" ]]; then
-            "$FUNCTION_NAME"_destructor
+            "$FUNCTION_NAME"__destructor
         fi
 
     else
