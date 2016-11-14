@@ -104,7 +104,7 @@ function call() {
     # Modular functionality: if you're calling a file, just try to call it's _main().
     if [[ -f $FILEPATH ]]; then
         # If there are any configurations, (stored in function `config`), call it first.
-        if [[ `declare -F | grep "$FUNCTION_NAME"_config` != "" ]]; then
+        if [[ `declare -F | grep "$FUNCTION_NAME"__config` != "" ]]; then
             "$FUNCTION_NAME"__config
         fi
 
@@ -113,7 +113,7 @@ function call() {
         # Call the destructor, if declared (which it should be, if config is declared)
         # TODO: I wonder whether this can be automated (don't need destructor), or even
         #       whether I should.
-        if [[ `declare -F | grep "$FUNCTION_NAME"_destructor` != "" ]]; then
+        if [[ `declare -F | grep "$FUNCTION_NAME"__destructor` != "" ]]; then
             "$FUNCTION_NAME"__destructor
         fi
 

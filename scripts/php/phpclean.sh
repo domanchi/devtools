@@ -44,7 +44,7 @@ function _main() {
 
             \?)
                 echo "Unknown flag."
-                usage
+                _usage
                 return
                 ;;
 
@@ -63,7 +63,7 @@ function _main() {
                 ;;
 
             h)
-                usage
+                _usage
                 return
                 ;;
 

@@ -23,7 +23,7 @@ function _destructor() {
 
 function _main() {
     if [[ $# = 0 ]]; then
-        usage
+        _usage
         return
     fi
 
@@ -39,7 +39,7 @@ function _main() {
 
             \?) 
                 echo "Unknown flag."
-                usage
+                _usage
                 return
                 ;;
 
@@ -48,7 +48,7 @@ function _main() {
                 ;;
 
             h)
-                usage
+                _usage
                 return
                 ;;
 
@@ -63,7 +63,7 @@ function _main() {
 
     if [[ $# == 0 ]]; then
         echo "Incorrect use."
-        usage
+        _usage
         return
     fi
 

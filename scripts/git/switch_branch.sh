@@ -18,7 +18,7 @@ function _main() {
     while getopts "hvf" opt; do
         case $opt in
             h)
-                usage
+                _usage
                 return
                 ;;
 
