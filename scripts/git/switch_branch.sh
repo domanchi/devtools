@@ -4,8 +4,10 @@ function usage() {
     echo "Usage: sb [-f] (<query>)";
     echo "  query is an optional parameter, that greps the branch name to switch to."
     echo "  When run without parameters, switch_branch will list the branches that can be switched to."
+    echo ""
     echo "Flags:"
     echo "  -f : forces the switch (when git tells you that the following files will be overwritten)"
+    echo "  -h : shows this message"
 }
 
 function main() {
@@ -53,6 +55,8 @@ function main() {
             if [[ "$HAS_ERROR" != "" ]]; then
                 # The error response is in format: \$EXPECTED_ERROR_MSG\n<list of files>\nPlease commit your changes...\nAborting
                 # There's probably a better sed way to do this, but my sed skills aren't fantastic.
+                # Want to only checkout the files that will be overriden, because if you checkout everything,
+                # you might lose files that you wanted to keep.
 
                 while read -r line; do
                     git checkout -- "$line"

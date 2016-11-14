@@ -3,7 +3,7 @@ import common.options
 
 function usage() {
     echo "Usage: stest [-tf] <path_to_test>"
-    echo "Will execute single test in ./$DEVTOOLS_PHPUNIT_DEFAULT_TEST_FOLDER/<path_to_test>"
+    echo "Will execute single test in $DEVTOOLS_PHPUNIT_DEFAULT_TEST_FOLDER/<path_to_test>"
     echo "Flags:"
     echo "  -t <relative_path> : overrides default test path, with supplied relative path."
     echo "  -f <test_case> : runs singular testcase within test file."
