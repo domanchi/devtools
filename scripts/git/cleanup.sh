@@ -15,6 +15,7 @@ function _config() {
 
 function _destructor() {
     unset DEFAULT_REMOTE_REPO
+    unset retval
 }
 
 function _main() {
@@ -51,9 +52,14 @@ function _main() {
     fi
 
     if [[ $FORCE_FLAG == true ]]; then
-        run "git branch -D "$1""  
+        run "git branch -D "$1"" retval  
     else
-        run "git branch -d "$1""
+        run "git branch -d "$1"" retval
+    fi
+    
+    if [[ `echo "$retval" | grep "error"` != "" ]]; then
+        echo "$retval"
+        return
     fi
 
     run "git push $DEFAULT_REMOTE_REPO --delete $1"
