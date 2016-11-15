@@ -8,9 +8,15 @@ function _usage() {
     echo "  If this isn't provided, it will default to HEAD."
 }
 
+function destructor() {
+    unset retval
+}
+
 function _main() {
-    # Don't need if statement, because [[ $# == 0 ]] already handles it.
     call common.options git.switch_branch retval "$@"
+    if [[ $retval == false ]]; then
+        return
+    fi
 
     if [[ $# == 0 ]]; then
         echo "Incorrect use."

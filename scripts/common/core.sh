@@ -124,8 +124,9 @@ function call() {
 }
 
 function run() {
-    # Usage: run <bash cmd>
-    # Prints bash command for debugging, if VERBOSE_MODE is set. 
+    # Usage: run <bash cmd> (<retval>)
+    # Prints bash command for debugging, if VERBOSE_MODE is set.
+    # retval can be passed in, to extract the error return value of the command.
     # NOTE: This will run in a subshell. There's no other way around it (that I currently know of)
 
     if [[ $# != 1 ]] && [[ $# != 2 ]]; then
@@ -141,7 +142,14 @@ function run() {
     if [[ $VERBOSE_FLAG == true ]]; then
         echo "$1"
     fi
-    eval $1
+
+    local TEMP=`eval $1 2>&1`
+
+    if [[ $# == 2 ]]; then
+        # TODO: Gotta be really careful. One of the reasons why this wasn't working was
+        # if single quotes were used inside, it would be escaped in the output.
+        eval $2='"$TEMP"'
+    fi
 }
 
 function log() {

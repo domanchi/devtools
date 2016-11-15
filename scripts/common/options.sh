@@ -14,6 +14,10 @@ function _main() {
     local FILENAME=`echo "$1" | tr "." "_"`
     shift
 
+    # Need to remove this from the stack, else getopts won't run.
+    local _RETVAL=$1
+    shift
+
     # getopt process.
     # NOTE: Trailing : indicates to ignore any errors from this getopts, because
     #       inputs can be passed onto the next getopts function.
@@ -22,7 +26,7 @@ function _main() {
         case $opt in
             h)
                 "$FILENAME"__usage
-                eval $2=true
+                eval $_RETVAL=false     # default value for uninitialized values == true
                 return
                 ;;
 
