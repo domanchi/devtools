@@ -8,6 +8,7 @@ please feel free to borrow, edit or improve my scripts to tailor it to your own 
 
 ### Tools
 Tools include:
+- git/cleanup : remove an inactive branch, both locally and remotely
 - git/submodule : update a git submodule
 - git/switch_branch : an efficient way to switch git branches with long names.
 - mac/app_interface : (Mac specific) interact with various applications on command line.

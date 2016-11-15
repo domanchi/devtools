@@ -9,6 +9,7 @@ clear_cache                                # so we're starting afresh
 
 import git
 alias sb='call git.switch_branch "$@"'
+alias rmb='call git.cleanup "$@"'
 
 import php
 alias phpclean='call php.phpclean "$@"'
