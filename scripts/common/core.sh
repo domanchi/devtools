@@ -12,10 +12,6 @@
 #
 # NOTE: Needs global variable $DEVTOOLS_BASEPATH to indicate where the
 #       root directory of scripts are.
-
-DEVTOOLS_CACHE_FILE=$DEVTOOLS_BASEPATH/.cache_namespace
-DEVTOOLS_GLOBAL_NAMESPACE="DEVTOOLS_TEMP_"
-
 function clear_cache() {
     if [[ -f $DEVTOOLS_CACHE_FILE ]]; then
         rm $DEVTOOLS_CACHE_FILE
@@ -40,7 +36,7 @@ function import() {
     if [[ -d "$FILEPATH" ]]; then
         while read -r line; do
             import $1.${line%".sh"}
-        done <<< "$(ls "$FILEPATH")"
+        done <<< "$(ls "$FILEPATH" | grep -e ".sh$")"
         return
     fi
 
@@ -78,7 +74,7 @@ function import() {
         local FUNCTION_NAME=${FUNCTION_NAME%"()"}       # remove trailing ()
         local OUTPUT=`echo "$OUTPUT" | \
             sed "s/function $FUNCTION_NAME/function FLUBFLUBFLUB/g; \
-                 s/$FUNCTION_NAME/call $(echo "$PREFIX$FUNCTION_NAME" | tr "_" ".")/g; \
+                 s/ $FUNCTION_NAME/ call $(echo "$PREFIX$FUNCTION_NAME" | tr "_" ".")/g; \
                  s/FLUBFLUBFLUB/$PREFIX$FUNCTION_NAME/g"`
     done <<< "$(echo "$OUTPUT" | grep "^function [a-zA-Z_]\(\)")"
 
@@ -143,12 +139,13 @@ function run() {
         echo "$1"
     fi
 
-    local TEMP=`eval $1 2>&1`
-
     if [[ $# == 2 ]]; then
         # TODO: Gotta be really careful. One of the reasons why this wasn't working was
         # if single quotes were used inside, it would be escaped in the output.
+        local TEMP=`eval $1 2>&1`
         eval $2='"$TEMP"'
+    else
+        eval $1
     fi
 }
 
