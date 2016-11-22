@@ -24,12 +24,15 @@ function devtools_main() {
         import git
         import php
         import mac.app_interface
+        import router
  
         # Save commit
         echo "#$public_hash" >> $DEVTOOLS_CACHE_FILE
     else
         . $DEVTOOLS_CACHE_FILE
     fi
+
+    alias devtools='call router "$@"'
 
     alias sb='call git.switch_branch "$@"'
     alias rmb='call git.cleanup "$@"'

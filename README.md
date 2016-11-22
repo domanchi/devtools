@@ -50,3 +50,7 @@ the script, and main will be called automatically when you refer to the filename
 refer to the function you want to call within that namespace). For more information, see [/scripts/common/core.sh]
 (https://github.com/domanchi/devtools/blob/master/scripts/common/core.sh)
 - Modules may require locally defined GLOBAL variables (because bash doesn't pass variables around very well). These can be defined in `_config()` and unset in `_destructor()`, and `call()` will automatically call these constructor/destructors.
+
+### Roadmap
+- There seems to be a multithreading issue with when initializing multiple bash
+instances at once. Look into atomic functionality.
