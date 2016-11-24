@@ -24,7 +24,9 @@ function devtools_main() {
         import git
         import php
         import mac.app_interface
+        import mac.misc
         import router
+        import useful.untar
  
         # Save commit
         echo "#$public_hash" >> $DEVTOOLS_CACHE_FILE
@@ -42,6 +44,9 @@ function devtools_main() {
 
     alias chrome='call mac.app_interface.chrome_main'
     alias sub='call mac.app_interface.sublime'
+
+    alias untar='call useful.untar "$@"'
+    alias mount='call mac.misc.mount_main "$@"'
 }
 
 devtools_main
