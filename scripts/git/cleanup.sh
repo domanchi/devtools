@@ -61,6 +61,12 @@ function _main() {
         echo "$retval"
         return
     fi
+    echo "Removed local branch."
 
-    run "git push $DEFAULT_REMOTE_REPO --delete $1"
+    run "git push $DEFAULT_REMOTE_REPO --delete $1" retval
+    if [[ "$retval" != "" ]]; then
+        echo "$retval"
+    else
+        echo "Removed remote branch on $DEFAULT_REMOTE_REPO"
+    fi
 }
