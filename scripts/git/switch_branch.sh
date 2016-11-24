@@ -6,8 +6,9 @@ function _usage() {
     echo "  When run without parameters, switch_branch will list the branches that can be switched to."
     echo ""
     echo "Flags:"
-    echo "  -f : forces the switch (when git tells you that the following files will be overwritten)"
+    echo "  -f : forces the switch (git checkout all conflicting files)"
     echo "  -h : shows this message"
+    echo "  -s : git stash changes, then apply stash on branch switch."
 }
 
 function _main() {
@@ -15,7 +16,7 @@ function _main() {
 
     # getopt process.
     OPTIND=1    # reset to beginning
-    while getopts "hvf" opt; do
+    while getopts "hvsf" opt; do
         case $opt in
             h)
                 _usage
@@ -29,6 +30,10 @@ function _main() {
             f)
                 local FORCE_FLAG=true
                 ;;
+
+            s)
+                local STASH_FLAG=true
+                ;;
         esac
     done
     shift $((OPTIND-1))
@@ -37,6 +42,11 @@ function _main() {
         echo "These are the branches you can switch to:"
         git branch
     elif [[ $# == 1 ]]; then
+        # Stash changes, if applicable
+        if [[ $STASH_FLAG ]]; then
+            run "git stash"
+        fi
+
         # Switch branch based on search query
         local BRANCH=`git branch | grep "$1"`
         if [[ $BRANCH = "" ]]; then
@@ -65,5 +75,10 @@ function _main() {
         fi
 
         git checkout $BRANCH
+
+        if [[ $STASH_FLAG ]]; then
+            run "git stash pop"
+            run "git reset HEAD ."      # because stash tries to merge changes, when you don't really need it.
+        fi
     fi 
 }
