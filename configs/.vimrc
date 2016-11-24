@@ -14,6 +14,7 @@ map RT :%s/\t/    /g
 " add colors in vim
 syntax on
 colorscheme default
+set colorcolumn=80
 
 " split windows that actually make sense
 set splitbelow
@@ -21,3 +22,8 @@ set splitright
 
 " display line numbers in vim
 set number
+
+" vimdiff
+map ]q :diffg LO
+map ]w :diffg BA
+map ]e :diffg RE
