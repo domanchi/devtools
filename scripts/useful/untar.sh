@@ -1,5 +1,4 @@
 #!/bin/bash
-
 function _usage() {
     echo "Usage: untar <file>"
 }
@@ -13,13 +12,24 @@ function _main() {
     local filename=$(basename "$1")
     local extension="${filename##*.}"
 
+    # Configure options depending on filetype.
     if [[ "$extension" == "bz2" ]]; then
-        tar -xvf -j $1
+        local file_type="j"
     elif [[ "$extension" == "gz" ]]; then
-        tar -xvf -z $1
-    elif [[ "$extension" == "tar" ]]; then
-        tar -xvf $1
-    else
+        local file_type="z"
+    elif [[ "$extension" == "xz" ]]; then
+        local file_type="J"
+    elif [[ "$extension" != "tar" ]]; then
         echo "Unknown file type."
+        return
     fi
+
+    if [[ $# == 2 ]]; then
+        if [[ ! -d $2 ]]; then
+            mkdir -p $2
+        fi
+        local output_location="-C $2"
+    fi
+
+    eval "tar -xv${file_type} -f $1 ${output_location}"
 }
