@@ -14,6 +14,7 @@ Tools include:
 - mac/app_interface : (Mac specific) interact with various applications on command line.
 - php/phpclean : use phpcbf to clean to-be-committed php files, so that it will comply with style-guide.
 - php/phpunit : easily run single tests with phpunit.
+- useful/untar : unzipping all sorts of tar files, so you don't have to remember those funky flags.
 
 ### Layout
 #### /configs
