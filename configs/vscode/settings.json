@@ -1,0 +1,13 @@
+// Place your settings in this file to overwrite the default settings
+{
+    "files.associations": {
+        "*.inc": "php",
+        "*.tpl": "html"
+    },
+
+    //  Makes the red squiggly lines come up onType, rather than onSave.
+    "php.validate.enable": true,
+    "php.validate.run": "onType",
+
+    "editor.rulers": [100]
+}
