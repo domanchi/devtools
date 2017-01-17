@@ -9,9 +9,18 @@ alias ls='ls -GFh'
 # Default options (because, why wouldn't you?)
 alias vim='vim -p'
 alias diff='colordiff '         # brew install colordiff (or apt-get)
+alias du='du -h'
+alias cp='rsync --progress'     # for progress bar
+alias jq='jq --indent 4 -S'
+alias grep="grep --color"
+
+# Linux => Mac conversion
+alias sha256sum="shasum -a 256"
+alias umount="diskutil unmount"
 
 # Quick Navigation
 alias ..="cd .."
 alias ...="cd ../.."
 alias ....="cd ../../.."
 alias .....="cd ../../../.."
+alias la="ls -lA"
