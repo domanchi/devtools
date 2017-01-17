@@ -24,6 +24,6 @@ set splitright
 set number
 
 " vimdiff
-map ]q :diffg LO
-map ]w :diffg BA
-map ]e :diffg RE
+map ]q :diffg LO<Enter>
+map ]w :diffg BA<Enter>
+map ]e :diffg RE<Enter>
