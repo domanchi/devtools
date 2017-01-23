@@ -1,6 +1,7 @@
 map <F5> :tabp<Enter>
 map <F6> :tabn<Enter>
 map ZA :qa<Enter>
+map ZS :wqa<Enter>
 map SS :w<Enter>
 
 " Select all
@@ -23,7 +24,19 @@ set splitright
 " display line numbers in vim
 set number
 
+" Folding configs
+set foldmethod=syntax   " because indent acts weird with empty lines
+set nofoldenable        " so files won't open closed
+
 " vimdiff
 map ]q :diffg LO
 map ]w :diffg BA
 map ]e :diffg RE
+
+" Needed setting for NERD commenter
+" Installation: https://github.com/scrooloose/nerdcommenter#user-content-unix
+filetype plugin on
+
+" Better searching
+set incsearch
+set hlsearch
