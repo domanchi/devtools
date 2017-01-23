@@ -82,10 +82,10 @@ function _main() {
         fi
 
         # Clean up php files.
-        run "$files_to_clean | xargs $DEVTOOLS_PHPCBF_LOCATION --standard='$DEVTOOLS_PHPCS_LOCATION'" $VERBOSE_MODE
+        run "$files_to_clean | xargs $DEVTOOLS_PHPCBF_LOCATION --standard='$DEVTOOLS_PHPCS_LOCATION'"
 
         # Add the cleaned php files to git, so it "saves" changes.
-        run "$files_to_clean | xargs git add" $VERBOSE_MODE
+        run "$files_to_clean | xargs git add"
     done 
 
     # git commit, if applicable.

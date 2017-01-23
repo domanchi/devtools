@@ -29,9 +29,9 @@ set foldmethod=syntax   " because indent acts weird with empty lines
 set nofoldenable        " so files won't open closed
 
 " vimdiff
-map ]q :diffg LO
-map ]w :diffg BA
-map ]e :diffg RE
+map ]q :diffg LO<Enter>
+map ]w :diffg BA<Enter>
+map ]e :diffg RE<Enter>
 
 " Needed setting for NERD commenter
 " Installation: https://github.com/scrooloose/nerdcommenter#user-content-unix

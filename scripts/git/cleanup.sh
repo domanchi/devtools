@@ -7,6 +7,7 @@ function _usage() {
     echo "  -h : shows this message"
     echo "  -f : uses 'git branch -D' rather than 'git branch -d'"
     echo "  -r : specifies remote repo. If not specified, default will be used as per script."
+    echo "       Current DEFAULT_REMOTE_REPO = '$DEFAULT_REMOTE_REPO'."
 }
 
 function _config() {
@@ -58,6 +59,7 @@ function _main() {
     fi
     
     if [[ `echo "$retval" | grep "error"` != "" ]]; then
+        # TODO: If it throws a -D error, should just echo custom output.
         echo "$retval"
         return
     fi

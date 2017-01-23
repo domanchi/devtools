@@ -1,7 +1,7 @@
 #!/bin/bash
 function _usage() {
-    echo "Usage: stest [-tf] <path_to_test>"
-    echo "Will execute single test in $DEVTOOLS_PHPUNIT_DEFAULT_TEST_FOLDER/<path_to_test>"
+    echo "Usage: stest [-tf] <search_string>"
+    echo "Will find and execute single test in $DEVTOOLS_PHPUNIT_DEFAULT_TEST_FOLDER"
     echo "Flags:"
     echo "  -t <relative_path> : overrides default test path, with supplied relative path."
     echo "  -f <test_case> : runs singular testcase within test file."
@@ -69,11 +69,15 @@ function _main() {
 
     # This runs the test in the docker environment.
     local prefix="docker-compose --project-name midkit-test --file docker-compose-test.yml run test $DEVTOOLS_PHPUNIT_LOCATION"
-    local basepath="$DEVTOOLS_PHPUNIT_DEFAULT_TEST_FOLDER"/"$1"
+    local basepath=`find "$DEVTOOLS_PHPUNIT_DEFAULT_TEST_FOLDER" -path "*$1*Test.php"`
 
-    if [[ ! "$basepath" == *.php ]]; then
-        echo "Invalid input: php file not found."
-        return  
+    if [[ "$basepath" == "" ]]; then
+        echo "No test cases found!"
+        return
+    elif [[ $(echo "$basepath" | wc -w) -gt 1 ]]; then
+        echo "Multiple test cases found. Which one did you mean?"
+        echo "$basepath"
+        return
     fi
 
     if [[ $VERBOSE_MODE == true ]]; then

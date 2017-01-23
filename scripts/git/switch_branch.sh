@@ -42,11 +42,6 @@ function _main() {
         echo "These are the branches you can switch to:"
         git branch
     elif [[ $# == 1 ]]; then
-        # Stash changes, if applicable
-        if [[ $STASH_FLAG ]]; then
-            run "git stash"
-        fi
-
         # Switch branch based on search query
         local BRANCH=`git branch | grep "$1"`
         if [[ $BRANCH = "" ]]; then
@@ -55,6 +50,11 @@ function _main() {
         elif [[ $(echo $BRANCH | wc -w) -gt 1 ]]; then
             echo "Multiple git branches found. Try a different query."
             return
+        fi
+
+        # Stash changes, if applicable
+        if [[ $STASH_FLAG ]]; then
+            run "git stash"
         fi
 
         if [[ $FORCE_FLAG == true ]]; then
@@ -74,6 +74,7 @@ function _main() {
             fi
         fi
 
+        # TODO: capture stderr on checkout, and abort if aborted. If not, stash will be deleted.
         git checkout $BRANCH
 
         if [[ $STASH_FLAG ]]; then
