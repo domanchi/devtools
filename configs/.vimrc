@@ -1,3 +1,5 @@
+source ~/.vimfns
+
 map <F5> :tabp<Enter>
 map <F6> :tabn<Enter>
 map ZA :qa<Enter>
@@ -40,3 +42,8 @@ filetype plugin on
 " Better searching
 set incsearch
 set hlsearch
+
+" Hexmode
+command Hexmode call ToggleHex()
+
+

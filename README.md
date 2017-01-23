@@ -34,6 +34,14 @@ as needed. For more information, see [/scripts/main.sh] (https://github.com/doma
 #### /configs
 Just override (or merge) your existing config files with these ones. 'nuf said.
 
+To have a better vim experience, you can also create a symlink to the config files.
+This is done through the following method:
+
+```
+ln -sf ~/devtools/configs/.vimrc ~/.vimrc
+ln -sf ~/devtools/configs/.vimfns ~/.vimfns
+```
+
 #### /scripts
 Within your `~/.bash_profile`, include the following line:
 ```
