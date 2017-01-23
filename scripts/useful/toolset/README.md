@@ -23,3 +23,9 @@ complete -o default -o nospace -F _python_argcomplete_notes notes
 ```
 
 This above code block has already been intergrated in devtools.
+
+## Registering a new module
+
+1. Create a new file (copy from an existing module)
+
+2. Remember to add the module to `__init__.py`
