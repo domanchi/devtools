@@ -1,8 +1,11 @@
 *.swp
 *.swo
+*.pyc
 
 scripts/tmp
 scripts/midkit
+scripts/useful/toolset/private/*
+!scripts/useful/toolset/private/__init__.py
 private_main.sh
 
 .cache_namespace
