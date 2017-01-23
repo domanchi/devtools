@@ -1,5 +1,9 @@
-#!/usr/bin/python
-import argcomplete
+#!/usr/bin/python2.7
+try:
+    import argcomplete
+except:
+    argcomplete = None
+
 import argparse
 import inspect
 import subprocess
@@ -62,7 +66,8 @@ class MainTool(AbstractTool):
         # for group in self.modules:
             # self.modules[group].parser(subparsers)
 
-        argcomplete.autocomplete(parser)
+        if argcomplete:
+            argcomplete.autocomplete(parser)
 
         try:
             args = parser.parse_args()
