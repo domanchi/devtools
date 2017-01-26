@@ -40,6 +40,8 @@ This is done through the following method:
 ```
 ln -sf ~/devtools/configs/.vimrc ~/.vimrc
 ln -sf ~/devtools/configs/.vimfns ~/.vimfns
+ln -sf ~/devtools/configs/.tmux.conf ~/.tmux.conf
+ln -sf ~/devtools/configs/tmux ~/tmux
 ```
 
 #### /scripts
