@@ -68,9 +68,13 @@ function _main() {
                 # Want to only checkout the files that will be overriden, because if you checkout everything,
                 # you might lose files that you wanted to keep.
 
+                local files_to_checkout=""
                 while read -r line; do
-                    git checkout -- "$line"
+                    local files_to_checkout="$files_to_checkout$line "
                 done <<< "$(echo "$TEMP" | sed '1d;$d;' | sed '$d')"
+
+                # Remove trailing whitespace (needed for git patch)
+                git checkout -- "$(echo -e "${files_to_checkout}" | sed -e 's/[[:space:]]*$//')"
             fi
         fi
 
