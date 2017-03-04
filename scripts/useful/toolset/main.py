@@ -6,6 +6,7 @@ except:
 
 import argparse
 import inspect
+import re
 import subprocess
 import sys
 
@@ -13,11 +14,13 @@ from common import AbstractTool, output_tools
 import private
 import public
 
-class ArgumentParserError(Exception): pass
+class ArgumentParserError(Exception):
+    def __init__(self, message):
+        self.message = message
 
 class CustomArgumentParser(argparse.ArgumentParser):
     def error(self, message):
-        raise ArgumentParserError
+        raise ArgumentParserError(message)
 
 class MainTool(AbstractTool):
 
@@ -71,7 +74,10 @@ class MainTool(AbstractTool):
 
         try:
             args = parser.parse_args()
-        except ArgumentParserError:
+        except ArgumentParserError, e:
+            unknown_query = re.search("invalid choice: '([\w-]+)'", e.message)
+            if unknown_query != None:
+                print "No entry found for '%s'\n" % unknown_query.group(1) 
             self.usage()
             return
 
@@ -83,8 +89,6 @@ class MainTool(AbstractTool):
 
             shell_cmd = "vim %s %s" % (line_start, allowedRoutes[args.query].file)
             subprocess.call(shell_cmd, shell=True) 
-        elif type(allowedRoutes[args.query]) == type(""):
-            print allowedRoutes[args.query]
         else:
             allowedRoutes[args.query].main(args)
 
