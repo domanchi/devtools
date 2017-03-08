@@ -4,6 +4,7 @@
 
 scripts/tmp
 scripts/midkit
+scripts/yelp
 scripts/useful/toolset/private/*
 !scripts/useful/toolset/private/__init__.py
 private_main.sh

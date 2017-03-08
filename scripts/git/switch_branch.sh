@@ -74,7 +74,7 @@ function _main() {
                 done <<< "$(echo "$TEMP" | sed '1d;$d;' | sed '$d')"
 
                 # Remove trailing whitespace (needed for git patch)
-                git checkout -- "$(echo -e "${files_to_checkout}" | sed -e 's/[[:space:]]*$//')"
+                git checkout -- $(echo -e "${files_to_checkout}" | sed -e 's/[[:space:]]*$//')
             fi
         fi
 

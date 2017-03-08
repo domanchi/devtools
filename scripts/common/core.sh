@@ -117,6 +117,7 @@ function call() {
         $FUNCTION_NAME "$@"
     fi
 
+    unset VERBOSE_MODE
 }
 
 function run() {

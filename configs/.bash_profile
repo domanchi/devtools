@@ -12,6 +12,7 @@ alias du='du -h'
 alias cp='rsync --progress'     # for progress bar
 alias jq='jq --indent 4 -S'
 alias grep="grep --color"
+alias less="less -R"
 
 # Linux => Mac conversion
 alias sha256sum="shasum -a 256"

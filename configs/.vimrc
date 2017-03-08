@@ -2,7 +2,7 @@ source ~/.vimfns
 
 map <F5> :tabp<Enter>
 map <F6> :tabn<Enter>
-map ZA :qa<Enter>
+map ZA :qa!<Enter>
 map ZS :wqa<Enter>
 map SS :w<Enter>
 
@@ -25,6 +25,9 @@ set splitright
 
 " display line numbers in vim
 set number
+
+" show column / row number
+set ruler
 
 " Folding configs
 set foldmethod=syntax   " because indent acts weird with empty lines

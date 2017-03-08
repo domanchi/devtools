@@ -11,6 +11,7 @@ class GitReferenceTool(AbstractTool):
             "git branch -t upstream/branch-name local-branch-name" : "track remote branch",
             "git config --global alias.<alias_name> '<git command to run>'":
                 "git alias",
+            "git rebase -i HEAD~X" : "squash commits, where HEAD~X is the branch to rebase from"
         }
 
         self.analysis = {
@@ -29,16 +30,17 @@ class GitReferenceTool(AbstractTool):
         super(GitReferenceTool, self).__init__()
 
     def usage(self):
+        print "-" * 33 + " One Liners " + "-" * 35
         print "Quick Reference:"
-        output_tools(self.reference, mode=OutputAlignment.LEFT, spacing=3)        
+        output_tools(self.reference, spacing=3, mode=OutputAlignment.LEFT)
         print
  
         print "Git Tagging:"
-        output_tools(self.tagging, mode=OutputAlignment.LEFT, spacing=3)
+        output_tools(self.tagging, spacing=3, mode=OutputAlignment.LEFT)
         print
 
         print "Investigative Work:"
-        output_tools(self.analysis, mode=OutputAlignment.LEFT, spacing=3) 
+        output_tools(self.analysis, spacing=3, mode=OutputAlignment.LEFT) 
         print
 
         print "-" * 35 + " Whoops... " + "-" * 35
@@ -49,3 +51,4 @@ class GitReferenceTool(AbstractTool):
         print "Delete git tag:"
         print "   git tag -d <tag_name>"
         print "   git push origin :refs/tags/<tag_name>"
+        print
