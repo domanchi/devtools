@@ -62,10 +62,10 @@ function import() {
     # Recursively import all files needed
     while read -r line; do
         $line
-    done <<< "$(grep "import" "$FILEPATH")"
+    done <<< "$(grep "^import" "$FILEPATH")"
 
     # Prefix functions, and output (excluding first line, and imports)
-    local OUTPUT=`tail -n +2 $FILEPATH | sed "/import/d"`
+    local OUTPUT=`tail -n +2 $FILEPATH | sed "/^import/d"`
 
     # Rename all local function calls to new namespace
     # NOTE: This is how to do a while loop by keeping it in main shell instance
