@@ -35,6 +35,11 @@
         "command": "editor.action.previousSelectionMatchFindAction",
         "when": "editorFocus"
     },
+    {
+        "key": "alt+5",
+        "command": "editor.action.jumpToBracket",
+        "when": "editorTextFocus"
+    },
 
     //  Give and take: smoother action, but can't do select smoothly
     { "key": "shift+cmd+[",    "command": "workbench.action.previousEditor" },
