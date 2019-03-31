@@ -19,8 +19,8 @@ function main() {
     fi
 
     # -e follows symlinks, and checks if file (at the end) exists
-    if [[ ! -e ~/.ssh/ssh_auth_sock ]]; then
-        ln -sf "$SSH_AUTH_SOCK" ~/.ssh/ssh_auth_sock
+    if [[ ! -e ~/.ssh/ssh-auth-sock ]]; then
+        ln -sf "$SSH_AUTH_SOCK" ~/.ssh/ssh-auth-sock
         echo "Fixed!"
     fi
 
