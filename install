@@ -219,7 +219,9 @@ def install_bash_configs(env, config):
     )
     content += textwrap.dedent("""
 
-        # This is auto-generated
+        ##########################
+        # This is auto-generated #
+        ##########################
         {scripts}
         {fzf}
     """).format(
@@ -304,7 +306,7 @@ def render_template(template_file, **kwargs):
         index = 0
         for line in f.readlines():
             line = line.rstrip()
-            if line.startswith('#!') or not line:
+            if line.startswith('#!'):
                 continue
 
             matches = regex.search(line)
