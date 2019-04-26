@@ -17,5 +17,11 @@ alias ..="cd .."
 alias ...="cd ../.."
 alias ....="cd ../../.."
 alias .....="cd ../../../.."
-alias ls='ls -GFh -I "*.pyc"'
+
+# Unfortunately, BSD doesn't support long arguments (wtf), but
+# this set of arguments should be cross-functional.
+#   -G: --classify
+#   -h: --human-readable
+#   -I: --ignore
+alias ls='ls --color -Fh -I "*.pyc"'
 alias la='ls -lAh'
