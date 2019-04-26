@@ -27,6 +27,9 @@ def main():
     install_vim_configs()
     logger.info('vim configs installed!')
 
+    install_bash_configs(args.env)
+    logger.info('bash configs installed!')
+
 
 def parse_args(argv=None):
     parser = argparse.ArgumentParser()
@@ -114,6 +117,24 @@ def install_vim_configs():
         ],
         stderr=subprocess.DEVNULL,
     )
+
+
+def install_bash_configs(env):
+    """
+    :type env: str
+    :param env: specifies host OS
+    """
+    # Install configs
+    content = 'source {}'.format(
+        get_path('configs/common/bash/bash_profile')
+    )
+
+    env_specific_config = get_path('configs/env/{}/bash_profile'.format(env))
+    if os.path.isfile(env_specific_config):
+        content += '\nsource {}'.format(env_specific_config)
+
+    with open(os.path.expanduser('~/.bash_profile'), 'w') as f:
+        f.write(content)
 
 
 def get_env_options():
