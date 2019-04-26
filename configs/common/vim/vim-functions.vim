@@ -38,3 +38,4 @@ function ToggleHex()
   let &modifiable=l:oldmodifiable
 endfunction
 
+command Hexmode call ToggleHex()
