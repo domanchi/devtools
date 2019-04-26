@@ -139,6 +139,11 @@ def install_vim_configs():
         f.write(content)
 
     # More colors
+    try:
+        os.mkdir(os.path.expanduser('~/.vim'))
+    except OSError:
+        pass
+
     force_create_symlink(
         get_path('configs/common/vim/colors'),
         os.path.expanduser('~/.vim/colors'),
