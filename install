@@ -1,0 +1,124 @@
+#!/usr/bin/python3
+import argparse
+import logging
+import os
+import subprocess
+import sys
+
+
+logger = logging.getLogger()
+
+
+def main():
+    args = parse_args()
+    if args.verbose:
+        logger.setLevel(
+            {
+                0: logging.ERROR,
+                1: logging.INFO,
+                2: logging.DEBUG,
+            }[min(args.verbose, 2)]
+        )
+
+    install_tmux_configs(args.env)
+    logger.info('tmux configs installed!')
+
+
+def parse_args(argv=None):
+    parser = argparse.ArgumentParser()
+
+    parser.add_argument(
+        'env',
+        help=(
+            'Each environment is slightly different. This specifies '
+            'the host OS, so that it can install compatible configs.'
+        ),
+        choices=get_env_options(),
+    )
+    parser.add_argument(
+        '-v',
+        '--verbose',
+        help='Configures verbosity of logs.',
+        action='count',
+    )
+
+    return parser.parse_args()
+
+
+def install_tmux_configs(env):
+    """
+    :type env: str
+    :param env: specifies host OS
+    """
+    # Install configs
+    content = 'source-file {}'.format(
+        get_path('configs/common/tmux/.tmux.conf')
+    ) 
+
+    env_specific_config = get_path('configs/env/{}/.tmux.conf'.format(env))
+    if os.path.isfile(env_specific_config):
+        content += '\nsource-file {}'.format(env_specific_config)
+
+    with open(os.path.expanduser('~/.tmux.conf'), 'w') as f:
+        f.write(content)
+
+    # Install plugins
+    try:
+        os.mkdir(os.path.expanduser('~/.tmux'))
+    except OSError:
+        pass
+
+    try:
+        os.symlink(
+            get_path('configs/common/tmux/scripts'),
+            os.path.expanduser('~/.tmux/scripts'),
+        )
+    except FileExistsError:
+        pass
+
+    git(
+        'clone',
+        'https://github.com/tmux-plugins/tpm',
+        os.path.expanduser('~/.tmux/plugins/tpm'),
+    )
+
+
+def get_env_options():
+    for root, dirs, filenames in os.walk(get_path('configs/env')):
+        return dirs
+
+
+def git(*args):
+    try:
+        return subprocess.check_output(
+            [
+                'git',
+                *args,
+            ],
+            stderr=subprocess.STDOUT,
+        )
+    except subprocess.CalledProcessError as e:
+        logger.error(e.output.decode('utf-8').strip())
+
+
+def get_path(path_to_file):
+    return os.path.abspath(
+        os.path.join(
+            __file__,
+            '..',
+            path_to_file,
+        )
+    )
+
+
+if __name__ == '__main__':
+    logger.handlers = []
+    handler = logging.StreamHandler(sys.stderr)
+    handler.setFormatter(
+        logging.Formatter(
+            '[%(levelname)s]\t%(message)s',
+        )
+    )
+    logger.addHandler(handler)
+
+    main()
