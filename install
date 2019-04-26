@@ -2,6 +2,7 @@
 import argparse
 import logging
 import os
+import shlex
 import subprocess
 import sys
 import textwrap
@@ -86,6 +87,36 @@ def install_tmux_configs(env):
         os.path.expanduser('~/.tmux/plugins/tpm'),
     )
 
+    tmux_pane_id = os.environ.get('TMUX_PANE')
+    if tmux_pane_id:
+        subprocess.call(
+            shlex.split(
+                'tmux source-file {}'.format(
+                    os.path.expanduser('~/.tmux.conf')
+                ),
+            )
+        )
+        subprocess.call(
+            shlex.split(
+                'tmux send-keys -t "{}" "{}" Enter'.format(
+                    tmux_pane_id,
+                    os.path.expanduser(
+                        '~/.tmux/plugins/tpm/scripts/install_plugins.sh'
+                    ),
+                )
+            )
+        )
+    else:
+        subprocess.call(
+            shlex.split(
+                'tmux new-session "{}"'.format(
+                    os.path.expanduser(
+                        '~/.tmux/plugins/tpm/scripts/install_plugins.sh'
+                    ),
+                )
+            )
+        )
+
 
 def install_vim_configs():
     # Install configs
@@ -117,6 +148,7 @@ def install_vim_configs():
         ],
         stderr=subprocess.DEVNULL,
     )
+    subprocess.call('vim +PlugInstall +qall'.split())
 
 
 def install_bash_configs(env):
