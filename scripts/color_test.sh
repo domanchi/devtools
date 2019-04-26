@@ -1,5 +1,6 @@
 #!/bin/bash
-# This file was originally taken from iterm2 https://github.com/gnachman/iTerm2/blob/master/tests/24-bit-color.sh
+# This file was originally taken from iterm2
+# https://github.com/gnachman/iTerm2/blob/master/tests/24-bit-color.sh
 #
 #   This file echoes a bunch of 24-bit color codes
 #   to the terminal to demonstrate its functionality.
@@ -10,6 +11,8 @@
 #
 # The expected output should look something like https://i.stack.imgur.com/QLvsw.png.
 # If it is blocky, this terminal does not support 24-bit colors.
+# To convert these colors to usable terminal ANSI codes, see
+# http://www.calmar.ws/vim/256-xterm-24bit-rgb-color-chart.html
 
 setBackgroundColor()
 {
