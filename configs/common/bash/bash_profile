@@ -8,16 +8,16 @@ export LSCOLORS=ExFxBxDxCxegedabagacad
 # Default options (because, why wouldn't you?)
 alias cp='rsync --progress'     # for progress bar
 alias du='du --human-readable'
-alias grep="grep --color"
+alias grep='grep --color'
 alias jq='jq --indent 4 --sort-keys'
 alias tmux='tmux -u'    # support utf-8
 alias vim='vim -p'      # opens tabs if multiple files are passed in
 
 # Quick Navigation
-alias ..="cd .."
-alias ...="cd ../.."
-alias ....="cd ../../.."
-alias .....="cd ../../../.."
+alias ..='cd ..'
+alias ...='cd ../..'
+alias ....='cd ../../..'
+alias .....='cd ../../../..'
 
 # Unfortunately, BSD doesn't support long arguments (wtf), but
 # this set of arguments should be cross-functional.
@@ -26,3 +26,6 @@ alias .....="cd ../../../.."
 #   -I: --ignore
 alias ls='ls --color -Fh -I "*.pyc"'
 alias la='ls -lAh'
+
+# Better git commands
+alias gs='git status'

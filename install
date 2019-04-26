@@ -2,10 +2,12 @@
 import argparse
 import logging
 import os
+import re
 import shlex
 import subprocess
 import sys
 import textwrap
+from collections import defaultdict
 
 
 logger = logging.getLogger()
@@ -21,14 +23,15 @@ def main():
                 2: logging.DEBUG,
             }[min(args.verbose, 2)]
         )
+    config = create_config(args)
 
-    install_tmux_configs(args.env)
+    install_tmux_configs(args.env, config)
     logger.info('tmux configs installed!')
 
-    install_vim_configs()
+    install_vim_configs(config)
     logger.info('vim configs installed!')
 
-    install_bash_configs(args.env)
+    install_bash_configs(args.env, config)
     logger.info('bash configs installed!')
 
     install_git_configs()
@@ -56,10 +59,32 @@ def parse_args(argv=None):
     return parser.parse_args()
 
 
-def install_tmux_configs(env):
+def create_config(args):
+    """
+    :type args: argparse.Namespace 
+    """
+    output = {}
+
+    # Enable FZF if the binary exists.
+    try:
+        subprocess.check_output(
+            'which fzf'.split(),
+            stderr=subprocess.DEVNULL,
+        ).decode('utf-8').strip()
+
+        output['fzf'] = True
+    except subprocess.CalledProcessError:
+        output['fzf'] = False
+
+    return output
+
+
+def install_tmux_configs(env, config):
     """
     :type env: str
     :param env: specifies host OS
+
+    :type config: dict
     """
     # Install configs
     content = get_env_configs(
@@ -123,7 +148,10 @@ def install_tmux_configs(env):
         )
 
 
-def install_vim_configs():
+def install_vim_configs(config):
+    """
+    :type config: dict
+    """
     # Install configs
     content = textwrap.dedent("""
         source {plugins}
@@ -150,27 +178,25 @@ def install_vim_configs():
     )
 
     # Install plugins
-    subprocess.call(
-        [
-            'curl',
-            '--fail',       # fail silently, on error
-            '--location',   # follow redirects
-            '--create-dirs',
-
-            '--output',
-            os.path.expanduser('~/.vim/autoload/plug.vim'),
-
-            'https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim',
-        ],
-        stderr=subprocess.DEVNULL,
+    download_file(
+        'https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim',
+        os.path.expanduser('~/.vim/autoload/plug.vim'),
     )
+    if config['fzf']:
+        download_file(
+            'https://raw.githubusercontent.com/junegunn/fzf/master/plugin/fzf.vim',
+            os.path.expanduser('~/.vim/autoload/fzf.vim'),
+        )
+
     subprocess.call('vim +PlugInstall +qall'.split())
 
 
-def install_bash_configs(env):
+def install_bash_configs(env, config):
     """
     :type env: str
     :param env: specifies host OS
+
+    :type config: dict
     """
     # Install configs
     content = get_env_configs(
@@ -180,6 +206,22 @@ def install_bash_configs(env):
         list_of_files=(
             'bash_profile',
         ),
+    )
+    content += textwrap.dedent("""
+
+        # This is auto-generated
+        {scripts}
+        {fzf}
+    """).format(
+        scripts=render_template(
+            get_path('configs/common/bash/scripts.tmpl'),
+            scripts=get_path('scripts'),
+        ),
+        fzf=render_template(
+            get_path('configs/common/bash/fzf.tmpl'),
+            scripts=get_path('scripts'),
+        ) if config['fzf'] else '',
+
     )
 
     with open(os.path.expanduser('~/.bash_profile'), 'w') as f:
@@ -234,6 +276,61 @@ def get_env_configs(env, base_file, source_cmd, list_of_files):
     return content
 
 
+def render_template(template_file, **kwargs):
+    """
+    Super simple, no dependency template engine.
+    Assumes valid input.
+
+    :type template_file: str
+    :param template_file: filename, ending in .tmpl
+    """
+    regex = re.compile('{{([ \w]+)}}')
+
+    lines = []
+    variables = set()
+    locations = defaultdict(list)
+    with open(template_file) as f:
+        index = 0
+        for line in f.readlines():
+            line = line.rstrip()
+            if line.startswith('#') or not line:
+                continue
+
+            matches = regex.search(line)
+            if matches:
+                for match in matches.groups():
+                    name = match.strip()
+                    variables.add(name)
+                    locations[index].append(name)
+
+            lines.append(line)
+            index += 1
+
+    if variables != set(kwargs.keys()):
+        missing_keys = variables - set(kwargs.keys())
+        raise ValueError(
+            'Missing parameters: {}'.format(
+                ', '.join(missing_keys)
+            )
+        )
+
+    output = []
+    for index, line in enumerate(lines):
+        try:
+            for name in locations[index]:
+                for match in re.search(r'({{ *' + name + r' *}})', line).groups():
+                    line = line.replace(
+                        match,
+                        kwargs[name],
+                    )
+        except IndexError:
+            pass
+
+        output.append(line)
+
+    return '\n'.join(output)
+
+
 def git(*args):
     try:
         return subprocess.check_output(
@@ -253,7 +350,30 @@ def force_create_symlink(src, dest):
     except FileExistsError:
         os.remove(dest)
         os.symlink(src, dest)
- 
+
+
+def download_file(src, dest):
+    """
+    :type src: str
+    :param src: url to download
+
+    :type dest: str
+    :param dest: path to save file
+    """
+    subprocess.call(
+        [
+            'curl',
+            '--fail',       # fail silently, on error
+            '--location',   # follow redirects
+            '--create-dirs',
+
+            '--output',
+            dest,
+            src,
+        ],
+        stderr=subprocess.DEVNULL,
+    )
+
 
 def get_path(path_to_file):
     return os.path.abspath(

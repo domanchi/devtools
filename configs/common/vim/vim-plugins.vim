@@ -18,6 +18,11 @@ call plug#begin()
     " Color scheme
     Plug 'morhetz/gruvbox'
 
+    " Fuzzy file matching
+    " The core file will be manually downloaded with the install
+    " script.
+    Plug 'junegunn/fzf.vim'
+
 call plug#end()
 
 " Necessary for NERDCommenter
