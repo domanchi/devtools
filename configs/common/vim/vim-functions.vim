@@ -1,5 +1,5 @@
 " http://vim.wikia.com/wiki/Improved_hex_editing
-function ToggleHex()
+function! ToggleHex()
   " hex mode should be considered a read-only operation
   " save values for modified and read-only for restoration later,
   " and clear the read-only flag for now
@@ -39,3 +39,25 @@ function ToggleHex()
 endfunction
 
 command Hexmode call ToggleHex()
+
+" https://vi.stackexchange.com/a/5919
+function! Rotate()
+    " save the original position, jump to the first window
+    let initial = winnr()
+    exe 1 . "wincmd w"
+
+    wincmd 1
+    if winnr() != 1
+        " succeeded moving to the right window
+        wincmd J " make it the bottom window
+    else
+        " cannot move to the right, so we are at the top
+        wincmd H " make it the left window
+    endif
+
+    " restore cursor to the initial window
+    exe initial . "wincmd w"
+endfunction
+
+" Rotate splits easily
+map <C-w><C-r> :call Rotate()<Enter>
