@@ -15,7 +15,11 @@ call plug#begin()
     " This allows for better Python folding.
     Plug 'tmhedberg/SimpylFold'
 
+    " Color scheme
+    Plug 'morhetz/gruvbox'
+
 call plug#end()
 
 " Necessary for NERDCommenter
 filetype plugin on
+

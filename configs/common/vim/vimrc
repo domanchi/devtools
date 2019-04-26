@@ -18,9 +18,11 @@ map RT :%s/\t/    /g
 
 " add colors in vim
 syntax on
-colorscheme default
 set colorcolumn=80
 highlight Folded ctermbg=Black
+
+colorscheme gruvbox
+set background=dark
 
 " split windows that actually make sense
 set splitbelow

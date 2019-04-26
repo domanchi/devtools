@@ -90,9 +90,9 @@ def install_tmux_configs(env):
 def install_vim_configs():
     # Install configs
     content = textwrap.dedent("""
+        source {plugins}
         source {base}
         source {custom_functions}
-        source {plugins}
     """)[1:].format(
         base=get_path('configs/common/vim/vimrc'),
         custom_functions=get_path('configs/common/vim/vim-functions.vim'),
