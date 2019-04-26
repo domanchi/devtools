@@ -59,13 +59,15 @@ def install_tmux_configs(env):
     :param env: specifies host OS
     """
     # Install configs
-    content = 'source-file {}'.format(
-        get_path('configs/common/tmux/tmux.conf')
-    ) 
-
-    env_specific_config = get_path('configs/env/{}/tmux.conf'.format(env))
-    if os.path.isfile(env_specific_config):
-        content += '\nsource-file {}'.format(env_specific_config)
+    content = get_env_configs(
+        env=env,
+        base_file='configs/common/tmux/tmux.conf',
+        source_cmd='source-file',
+        list_of_files=(
+            'tmux.conf',
+            'tmux-colors.conf',
+        ),
+    )
 
     with open(os.path.expanduser('~/.tmux.conf'), 'w') as f:
         f.write(content)
@@ -157,13 +159,14 @@ def install_bash_configs(env):
     :param env: specifies host OS
     """
     # Install configs
-    content = 'source {}'.format(
-        get_path('configs/common/bash/bash_profile')
+    content = get_env_configs(
+        env=env,
+        base_file='configs/common/bash/bash_profile',
+        source_cmd='source',
+        list_of_files=(
+            'bash_profile',
+        ),
     )
-
-    env_specific_config = get_path('configs/env/{}/bash_profile'.format(env))
-    if os.path.isfile(env_specific_config):
-        content += '\nsource {}'.format(env_specific_config)
 
     with open(os.path.expanduser('~/.bash_profile'), 'w') as f:
         f.write(content)
@@ -172,6 +175,42 @@ def install_bash_configs(env):
 def get_env_options():
     for root, dirs, filenames in os.walk(get_path('configs/env')):
         return dirs
+
+
+def get_env_configs(env, base_file, source_cmd, list_of_files):
+    """
+    :type env: str
+    :param env: specifies host OS
+
+    :type base_file: str
+    :param base_file: this will always be imported, even if no environment
+        specific config files are available.
+
+    :type source_cmd: str
+    :param source_cmd: command used to source external files.
+        e.g. bash uses `source`
+
+    :type list_of_files: iterable
+
+    :rtype: str
+    :returns: content to write to file
+    """
+    content = '{} {}'.format(
+        source_cmd,
+        get_path(base_file),
+    )
+
+    for filename in list_of_files:
+        env_specific_config = get_path(
+            'configs/env/{}/{}'.format(
+                env,
+                filename,
+            )
+        )
+        if os.path.isfile(env_specific_config):
+            content += '\n{} {}'.format(source_cmd, env_specific_config)
+
+    return content
 
 
 def git(*args):
