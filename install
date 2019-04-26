@@ -31,6 +31,9 @@ def main():
     install_bash_configs(args.env)
     logger.info('bash configs installed!')
 
+    install_git_configs()
+    logger.info('git configs installed!')
+
 
 def parse_args(argv=None):
     parser = argparse.ArgumentParser()
@@ -176,6 +179,13 @@ def install_bash_configs(env):
 
     with open(os.path.expanduser('~/.bash_profile'), 'w') as f:
         f.write(content)
+
+
+def install_git_configs():
+    force_create_symlink(
+        get_path('configs/.gitconfig'),
+        os.path.expanduser('~/.gitconfig'),
+    )
 
 
 def get_env_options():
