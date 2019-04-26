@@ -70,11 +70,21 @@ def create_config(args):
         subprocess.check_output(
             'which fzf'.split(),
             stderr=subprocess.DEVNULL,
-        ).decode('utf-8').strip()
+        )
 
         output['fzf'] = True
     except subprocess.CalledProcessError:
         output['fzf'] = False
+
+    try:
+        subprocess.check_output(
+            'which rg'.split(),
+            stderr=subprocess.DEVNULL,
+        )
+
+        output['rg'] = True
+    except subprocess.CalledProcessError:
+        output['rg'] = False
 
     return output
 
@@ -220,6 +230,7 @@ def install_bash_configs(env, config):
         fzf=render_template(
             get_path('configs/common/bash/fzf.tmpl'),
             scripts=get_path('scripts'),
+            has_rg='true' if config['rg'] else 'false',
         ) if config['fzf'] else '',
 
     )
@@ -293,7 +304,7 @@ def render_template(template_file, **kwargs):
         index = 0
         for line in f.readlines():
             line = line.rstrip()
-            if line.startswith('#') or not line:
+            if line.startswith('#!') or not line:
                 continue
 
             matches = regex.search(line)
