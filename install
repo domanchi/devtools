@@ -135,6 +135,12 @@ def install_vim_configs():
     with open(os.path.expanduser('~/.vimrc'), 'w') as f:
         f.write(content)
 
+    # More colors
+    force_create_symlink(
+        get_path('configs/common/vim/colors'),
+        os.path.expanduser('~/.vim/colors'),
+    )
+
     # Install plugins
     subprocess.call(
         [
