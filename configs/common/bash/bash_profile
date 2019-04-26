@@ -10,6 +10,7 @@ alias cp='rsync --progress'     # for progress bar
 alias du='du --human-readable'
 alias grep="grep --color"
 alias jq='jq --indent 4 --sort-keys'
+alias tmux='tmux -u'    # support utf-8
 alias vim='vim -p'      # opens tabs if multiple files are passed in
 
 # Quick Navigation
