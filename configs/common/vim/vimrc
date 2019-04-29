@@ -21,7 +21,7 @@ syntax on
 set colorcolumn=80
 highlight Folded ctermbg=Black
 
-colorscheme gruvbox
+colorscheme monokai
 set background=dark
 
 " split windows that actually make sense
