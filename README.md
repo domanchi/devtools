@@ -62,6 +62,18 @@ refer to the function you want to call within that namespace). For more informat
 (https://github.com/domanchi/devtools/blob/master/scripts/common/core.sh)
 - Modules may require locally defined GLOBAL variables (because bash doesn't pass variables around very well). These can be defined in `_config()` and unset in `_destructor()`, and `call()` will automatically call these constructor/destructors.
 
+#### Windows
+
+- `vscode`
+
+To be compatible with VSCode, we need to make a symbolic link with `cmd`, and have the file in a location where
+Windows can access it. For some reason, Windows also doesn't like symbolic links that WSL makes (`ln -s`).
+
+```
+mklink %APPDATA%\Code\User\keybindings.json devtools\configs\common\vscode\keybindings.json
+mklink %APPDATA%\Code\User\settings.json devtools\configs\common\vscode\settings.json
+```
+
 ### Roadmap
 - There seems to be a multithreading issue with when initializing multiple bash
 instances at once. Look into atomic functionality.

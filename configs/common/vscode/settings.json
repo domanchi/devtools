@@ -1,18 +1,37 @@
 // Place your settings in this file to overwrite the default settings
 {
+    "terimal.integrated.shell.windows": "C:\\Windows\\System32\\bash.exe",
+
     "files.associations": {
         "*.inc": "php",
-        "*.tpl": "html"
+        "*.tmpl": "html"
+    },
+    "files.eol": "\n",
+    "files.exclude": {
+        ".sass-cache/**": true,
+        "node_modules/**": true,
+        "venv/**": true,
+
+        "**/*.swp": true,
+        "**/*.pyc": true,
+        "**/.DS_Store": true,
+        "**/.git": true,
+        "**/__pycache__/**": true,
     },
 
-    "files.exclude": {
-        "**/*.swp": true,
-        "**/*.pyc": true
-    },
+    "editor.rulers": [100],
+
+    "workbench.startupEditor": "newUntitledFile",
+    "window.zoomLevel": 0,
 
     //  Makes the red squiggly lines come up onType, rather than onSave.
     "php.validate.enable": true,
     "php.validate.run": "onType",
 
-    "editor.rulers": [100]
+    "[html]": {
+        "editor.tabSize": 2,
+    },
+    "[javascriptreact]": {
+        "editor.tabSize": 2,
+    },
 }

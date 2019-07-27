@@ -28,7 +28,7 @@
     { 
         "key": "cmd+8",
         "command": "editor.action.nextSelectionMatchFindAction",
-        "when": "editorFocus"
+        "when": "editorFocus",
     },
     { 
         "key": "cmd+shift+8",
@@ -65,5 +65,11 @@
             "workbench.debug.action.toggleRepl",
             "workbench.view.debug"
         ]
+    },
+
+    {
+        "key": "ctrl+b",
+        "command": "-markdown.extension.editing.toggleBold",
+        "when": "editorTextFocus && !editorReadonly && editorLangId == 'markdown'"
     }
 ]
