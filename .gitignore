@@ -1,6 +1,8 @@
 *.swp
 *.swo
 *.pyc
+**/node_modules/**
+**/.DS_Store
 
 scripts/tmp
 scripts/midkit
