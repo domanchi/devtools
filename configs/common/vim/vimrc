@@ -1,4 +1,6 @@
-source ~/.vimfns
+""""""""""""""""""""""""
+" This assumes Vim 7.4 "
+""""""""""""""""""""""""
 
 map <F5> :tabp<Enter>
 map <F6> :tabn<Enter>
@@ -16,8 +18,11 @@ map RT :%s/\t/    /g
 
 " add colors in vim
 syntax on
-colorscheme default
 set colorcolumn=80
+highlight Folded ctermbg=Black
+
+colorscheme monokai
+set background=dark
 
 " split windows that actually make sense
 set splitbelow
@@ -38,15 +43,6 @@ map ]q :diffg LO<Enter>
 map ]w :diffg BA<Enter>
 map ]e :diffg RE<Enter>
 
-" Needed setting for NERD commenter
-" Installation: https://github.com/scrooloose/nerdcommenter#user-content-unix
-filetype plugin on
-
 " Better searching
 set incsearch
 set hlsearch
-
-" Hexmode
-command Hexmode call ToggleHex()
-
-

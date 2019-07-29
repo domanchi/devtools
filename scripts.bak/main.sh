@@ -41,11 +41,12 @@ function devtools_main() {
 
     alias devtools='call router "$@"'
 
-    alias notes='$DEVTOOLS_BASEPATH/useful/toolset/main.py'
-    alias toolset='cd $DEVTOOLS_BASEPATH/useful/toolset'
-    eval "$(register-python-argcomplete $DEVTOOLS_BASEPATH/useful/toolset/main.py)"
-    complete -o default -o nospace -F _python_argcomplete_notes notes
+    #alias notes='$DEVTOOLS_BASEPATH/useful/toolset/main.py'
+    #alias toolset='cd $DEVTOOLS_BASEPATH/useful/toolset'
+    #eval "$(register-python-argcomplete $DEVTOOLS_BASEPATH/useful/toolset/main.py)"
+    #complete -o default -o nospace -F _python_argcomplete_notes notes
 
+    alias gs='git status'
     alias sb='call git.switch_branch "$@"'
     alias rmb='call git.cleanup "$@"'
 
