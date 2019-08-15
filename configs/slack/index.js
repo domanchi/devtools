@@ -10,6 +10,9 @@ const { exec, spawn } = require("child_process");
 function main() {
     const resources = "/Applications/Slack.app/Contents/Resources";
     createBackup(resources).then(() => {
+        //  TODO: Force close the application, before injecting.
+        //        We might be able to see whether it's running by just using
+        //        `ps aux | grep`
         return inject(resources);
     }).then(() => {
         console.log("Done!");
@@ -115,7 +118,9 @@ function constructPayload(cssFile="custom.css") {
         \`;
 
         function injectCSS() {
-            $("<style></style>").appendTo("head").html(customCSSString);
+            const styleBlock = document.createElement("style");
+            styleBlock.appendChild(document.createTextNode(customCSSString));
+            document.getElementsByTagName("head")[0].appendChild(styleBlock);
         }
 
         document.addEventListener("DOMContentLoaded", injectCSS);
