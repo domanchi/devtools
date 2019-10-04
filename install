@@ -228,6 +228,7 @@ def install_bash_configs(env, config):
         scripts=render_template(
             get_path('configs/common/bash/scripts.tmpl'),
             scripts=get_path('scripts'),
+            root=get_path('.'),
         ),
         fzf=render_template(
             get_path('configs/common/bash/fzf.tmpl'),
