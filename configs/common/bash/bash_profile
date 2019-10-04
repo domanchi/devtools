@@ -27,7 +27,7 @@ alias .....='cd ../../../..'
 #   -G: --classify
 #   -h: --human-readable
 #   -I: --ignore
-alias ls='ls --color -Fh -I "*.pyc"'
+alias ls='`which ls` --color -Fh -I "*.pyc"'
 alias la='ls -lAh'
 
 # Better git commands
