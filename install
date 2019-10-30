@@ -224,6 +224,10 @@ def install_bash_configs(env, config):
         ##########################
         {scripts}
         {fzf}
+
+        ############################
+        # End auto-generation code #
+        ############################
     """).format(
         scripts=render_template(
             get_path('configs/common/bash/scripts.tmpl'),

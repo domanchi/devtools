@@ -21,6 +21,7 @@ call plug#begin()
     " Fuzzy file matching
     " The core file will be manually downloaded with the install
     " script.
+    Plug 'junegunn/fzf', {'dir': '~/.fzf', 'do': './install --all'}
     Plug 'junegunn/fzf.vim'
 
 call plug#end()
