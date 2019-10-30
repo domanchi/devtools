@@ -121,11 +121,13 @@ def install_tmux_configs(env, config):
         os.path.expanduser('~/.tmux/scripts'),
     )
 
-    git(
-        'clone',
-        'https://github.com/tmux-plugins/tpm',
-        os.path.expanduser('~/.tmux/plugins/tpm'),
-    )
+    tpm_path = os.path.expanduser('~/.tmux/plugins/tpm')
+    if not os.path.isdir(tpm_path):
+        git(
+            'clone',
+            'https://github.com/tmux-plugins/tpm',
+            tpm_path,
+        )
 
     tmux_pane_id = os.environ.get('TMUX_PANE')
     if tmux_pane_id:
@@ -282,14 +284,16 @@ def get_env_configs(env, base_file, source_cmd, list_of_files):
     )
 
     for filename in list_of_files:
-        env_specific_config = get_path(
+        for path in [
             'configs/env/{}/{}'.format(
                 env,
                 filename,
-            )
-        )
-        if os.path.isfile(env_specific_config):
-            content += '\n{} {}'.format(source_cmd, env_specific_config)
+            ),
+            'private/configs/{}'.format(filename),
+        ]:
+            path = get_path(path)
+            if os.path.isfile(path):
+                content += '\n{} {}'.format(source_cmd, path)
 
     return content
 
