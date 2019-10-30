@@ -32,3 +32,12 @@ alias la='ls -lAh'
 
 # Better git commands
 alias gs='git status'
+
+function isNotInPath() {
+    # Usage: isInPath "<query>"
+    if [[ $PATH = *"$1"* ]]; then
+        return 1
+    fi
+
+    return 0
+}
