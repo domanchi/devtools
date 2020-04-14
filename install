@@ -9,6 +9,8 @@ import sys
 import textwrap
 from collections import defaultdict
 
+from lib.bash import install_bash_configs
+
 
 logger = logging.getLogger()
 
@@ -23,6 +25,10 @@ def main():
                 2: logging.DEBUG,
             }[min(args.verbose, 2)]
         )
+
+    install_bash_configs()
+    logger.info('bash configs installed!')
+
     config = create_config(args)
 
     install_tmux_configs(args.env, config)
@@ -30,9 +36,6 @@ def main():
 
     install_vim_configs(config)
     logger.info('vim configs installed!')
-
-    install_bash_configs(args.env, config)
-    logger.info('bash configs installed!')
 
     install_git_configs()
     logger.info('git configs installed!')
@@ -201,51 +204,6 @@ def install_vim_configs(config):
         )
 
     subprocess.call('vim +PlugInstall +qall'.split())
-
-
-def install_bash_configs(env, config):
-    """
-    :type env: str
-    :param env: specifies host OS
-
-    :type config: dict
-    """
-    # Install configs
-    content = get_env_configs(
-        env=env,
-        base_file='configs/common/bash/bash_profile',
-        source_cmd='source',
-        list_of_files=(
-            'bash_profile',
-        ),
-    )
-    content += textwrap.dedent("""
-
-        ##########################
-        # This is auto-generated #
-        ##########################
-        {scripts}
-        {fzf}
-
-        ############################
-        # End auto-generation code #
-        ############################
-    """).format(
-        scripts=render_template(
-            get_path('configs/common/bash/scripts.tmpl'),
-            scripts=get_path('scripts'),
-            root=get_path('.'),
-        ),
-        fzf=render_template(
-            get_path('configs/common/bash/fzf.tmpl'),
-            scripts=get_path('scripts'),
-            has_rg='true' if config['rg'] else 'false',
-        ) if config['fzf'] else '',
-
-    )
-
-    with open(os.path.expanduser('~/.bash_profile'), 'w') as f:
-        f.write(content)
 
 
 def install_git_configs():
