@@ -79,6 +79,16 @@ def _create_modules_directory(
     if not os.path.isdir(root):
         os.mkdir(root)
 
+    # Cleanup dead symlinks first.
+    for filename in os.listdir(root):
+        try:
+            dest = os.readlink(os.path.join(root, filename))
+            if dest.startswith(get_path_to()) and not os.path.isfile(dest):
+                os.unlink(os.path.join(root, filename))
+        except OSError:
+            # Ignore if not a symlink
+            pass
+
     for name, source in modules.items():
         force_create_symlink(
             source,
