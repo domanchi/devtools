@@ -1,8 +1,3 @@
-if [[ ! `which rg` ]]; then
-    echo "Installing ripgrep..."
-    brew install ripgrep
-fi
-
 # This allows for Ctrl + P to edit a file in vim.
 # Use tab to indicate multiple files to load.
 bind -x '"\C-p": $HOME/devtools/scripts/fzf.sh'
