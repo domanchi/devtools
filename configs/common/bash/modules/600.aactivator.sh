@@ -11,7 +11,7 @@ fi
 # Then, run it so it is aware of .activate.sh and .deactivate.sh
 eval "$("$HOME/devtools/scripts/aactivator" init)"
 
-function build-venv {
+function build-venv() {
     # Usage: build-venv "<name>"
     # Parameters:
     #   - name: directory name of virtualenv.
