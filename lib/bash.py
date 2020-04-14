@@ -124,4 +124,28 @@ def _write_bash_profile(root: str):
 
 
 if __name__ == '__main__':
-    install_bash_configs()
+    import argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        '-l',
+        '--list',
+        action='store_true',
+    )
+
+    args = parser.parse_args()
+    if args.list:
+        modules = _get_modules()
+        for key in sorted(modules.keys()):
+            prefixes = {
+                'common',
+                'osx',
+                'wsl',
+                'ubuntu',
+            }
+            for prefix in prefixes:
+                if f'/{prefix}' in modules[key]:
+                    break
+
+            print(f'{prefix}:{key}')
+    else: 
+        install_bash_configs()
