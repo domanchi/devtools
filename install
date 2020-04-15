@@ -10,6 +10,7 @@ import textwrap
 from collections import defaultdict
 
 from lib.bash import install_bash_configs
+from lib.vscode import install_vscode_configs
 
 
 logger = logging.getLogger()
@@ -29,6 +30,9 @@ def main():
     install_bash_configs()
     logger.info('bash configs installed!')
 
+    install_vscode_configs()
+
+    # Old configs
     config = create_config(args)
 
     install_tmux_configs(args.env, config)
