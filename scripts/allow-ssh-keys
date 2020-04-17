@@ -62,7 +62,7 @@ def parse_args() -> argparse.Namespace:
 
 def get_public_keys_from_github(username: str) -> List[str]:
     response = requests.get(
-        f'https://github.com/{username}.keys'
+        'https://github.com/{}.keys'.format(username),
     )
 
     if response.status_code != 200:
