@@ -10,6 +10,7 @@ import textwrap
 from collections import defaultdict
 
 from lib.bash import install_bash_configs
+from lib.exceptions import InstallError
 from lib.vscode import install_vscode_configs
 
 
@@ -30,7 +31,10 @@ def main():
     install_bash_configs()
     logger.info('bash configs installed!')
 
-    install_vscode_configs()
+    try:
+        install_vscode_configs()
+    except InstallError as e:
+        logger.error(str(e))
 
     # Old configs
     config = create_config(args)
