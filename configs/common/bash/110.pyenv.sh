@@ -13,6 +13,6 @@ fi
 
 # Add to path if not already in there.
 if [[ "$PATH" != *"/.pyenv/"* ]]; then
-    export PATH="/Users/aaronloo/.pyenv/bin:$PATH"
+    export PATH="$HOME/.pyenv/bin:$PATH"
     eval "$(pyenv init -)"
 fi
