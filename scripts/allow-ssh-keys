@@ -1,0 +1,169 @@
+#!/usr/bin/env python3
+from typing import Callable
+from typing import List
+from typing import Optional
+from typing import Union
+import argparse
+import os
+import sys
+
+import requests
+
+
+def main() -> int:
+    args = parse_args()
+
+    try:
+        with open(os.path.join(args.directory, 'authorized_keys')) as f:
+            existing_keys = set(f.read().splitlines())
+    except FileNotFoundError:
+        existing_keys = set([])
+    except PermissionError:
+        print(
+            'error: unable to read file.',
+            file=sys.stderr,
+        )
+        return 1
+
+    public_keys = get_public_keys_from_github(args.username)
+
+    try:
+        with open(os.path.join(args.directory, 'authorized_keys'), 'w') as f:
+            for key in (set(public_keys).union(existing_keys)):
+                f.write('{}\n'.format(key))
+    except PermissionError:
+        print(
+            'error: unable to write to file.',
+            file=sys.stderr,
+        )
+        return 1
+
+    return 0
+
+
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(
+        description='Installs public keys from Github for a given user.',
+    )
+    parser.add_argument(
+        'username',
+        type=str,
+        help='Github username to obtain keys for.',
+    )
+    parser.add_argument(
+        '-d',
+        '--directory',
+        type=PathType(type='dir', exists=True),
+        default=os.path.expanduser('~/.ssh'),
+    )
+
+    return parser.parse_args()
+
+
+def get_public_keys_from_github(username: str) -> List[str]:
+    response = requests.get(
+        f'https://github.com/{username}.keys'
+    )
+
+    if response.status_code != 200:
+        return []
+
+    return response.text.splitlines()
+
+
+class PathType:
+    """
+    Adapted from: https://stackoverflow.com/a/33181083
+    """
+    def __init__(
+        self,
+        exists: bool = True,
+        type: Optional[Union[Callable, str]] = 'file',
+        dash_ok: bool = True
+    ):
+        """
+        :param exists:
+            True -- a path that does exist
+            False -- a path that does not exist, in a valid parent directory
+            None -- don't care
+
+        :param type: must be one of the following values:
+            `file`, `dir`, `symlink`, `None`, or a function returning True
+            for valid paths.
+
+            if None, it disables the check.
+
+        :param dash_ok: if True, it allows `-` as stdin/stdout.
+        """
+        assert exists in (True, False, None)
+        assert type in ('file','dir','symlink',None) or isinstance(type, callable)
+
+        self._exists = exists
+        self._type = type
+        self._dash_ok = dash_ok
+
+    def __call__(self, string: str):
+        if string == '-':
+            # the special argument "-" means sys.std{in,out}
+            if self._type == 'dir':
+                raise argparse.ArgumentTypeError(
+                    'standard input/output (-) not allowed as directory path'
+                )
+            elif self._type == 'symlink':
+                raise argparse.ArgumentTypeError(
+                    'standard input/output (-) not allowed as symlink path'
+                )
+            elif not self._dash_ok:
+                raise argparse.ArgumentTypeError(
+                    'standard input/output (-) not allowed'
+                )
+
+            return string
+
+        does_exist = os.path.exists(string)
+        if self._exists:
+            if not does_exist:
+                raise argparse.ArgumentTypeError(
+                    "path does not exist: '{}'".format(string)
+                )
+
+            if self._type == 'file':
+                if not os.path.isfile(string):
+                    raise argparse.ArgumentTypeError(
+                        "path is not a file: '{}'".format(string)
+                    )
+            elif self._type == 'symlink':
+                if not os.path.symlink(string):
+                    raise argparse.ArgumentTypeError(
+                        "path is not a symlink: '{}'".format(string)
+                    )
+            elif self._type == 'dir':
+                if not os.path.isdir(string):
+                    raise argparse.ArgumentTypeError(
+                        "path is not a directory: '{}'".format(string)
+                    )
+            elif self._type and self._type(string):
+                raise argparse.ArgumentTypeError(
+                    "path is not valid: '{}'".format(string)
+                )
+        else:
+            if not self._exists and does_exist:
+                raise argparse.ArgumentTypeError(
+                    "path already exists: '{}'".format(string)
+                )
+
+            parent_dir = os.path.dirname(os.path.normpath(string)) or '.'
+            if not os.path.isdir(parent_dir):
+                raise argparse.ArgumentTypeError(
+                    "parent path is not a directory: '{}'".format(parent_dir)
+                )
+            elif not os.path.exists(parent_dir):
+                raise argparse.ArgumentTypeError(
+                    "parent path does not exist: '{}'".format(parent_dir)
+                )
+
+        return string
+
+
+if __name__ == '__main__':
+    sys.exit(main())
