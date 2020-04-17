@@ -11,14 +11,18 @@ function start-ssh-agent {
     /usr/bin/ssh-add;
 }
 
-# Source SSH settings, if applicable
-if [[ -f "$SSH_ENV" ]]; then
-    . "$SSH_ENV" > /dev/null
-    ps -ef | grep ${SSH_AGENT_PID} | grep ssh-agent$ > /dev/null || {
+# For scenarios where the socket is already passed through (e.g. ssh -A),
+# we don't want to override it.
+if [[ -z "$SSH_AUTH_SOCK" ]]; then
+    # Source SSH settings, if applicable
+    if [[ -f "$SSH_ENV" ]]; then
+        . "$SSH_ENV" > /dev/null
+        ps -ef | grep ${SSH_AGENT_PID} | grep ssh-agent$ > /dev/null || {
+            start-ssh-agent;
+        }
+    else
         start-ssh-agent;
-    }
-else
-    start-ssh-agent;
+    fi
 fi
 
 unset SSH_ENV
