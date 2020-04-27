@@ -1,5 +1,7 @@
+from collections import namedtuple
 from glob import glob
 from typing import Dict
+from typing import Optional
 import os
 import textwrap
 
@@ -8,12 +10,49 @@ from .util import get_path_to
 from .util import force_create_symlink
 
 
-def install_bash_configs(root: str = '~'):
+class BashInstallOptions(namedtuple(
+    'BashInstallOptions',
+    (
+        # Currently, the bash modules are written to install any tools
+        # that are necessary for reproducing the complete devtools package.
+        # However, there are some machines that are locked down so we can't
+        # install binaries like we'd like.
+        #
+        # In these cases, this value will be False, so that we can take
+        # advantage of all the other aliases (and shortcuts that don't involve
+        # installing third party packages) on more machines.
+        'should_install',
+    ),
+)):
+    """
+    These options will be written to the modules folder, as 000.config.sh
+    """
+    def __new__(self, should_install: bool = True):
+        return super().__new__(self, should_install)
+
+    @property
+    def filename(self) -> str:
+        return '000.config.sh'
+
+    def __str__(self) -> str:
+        return textwrap.dedent(f"""
+            export DEVTOOLS_INSTALL_BINARIES={1 if self.should_install else 0}
+        """)[1:]
+
+
+def install_bash_configs(
+    root: str = '~',
+    options: Optional[BashInstallOptions] = None,
+):
+    if not options:
+        options = BashInstallOptions()
+
     modules = _get_modules()
     _assert_no_conflicts(modules)
 
     _create_modules_directory(
         modules,
+        options,
         root=os.path.join(root, '.bash_modules'),
     )
     _write_bash_profile(root)
@@ -59,6 +98,7 @@ def _assert_no_conflicts(modules: Dict[str, str]):
 
 def _create_modules_directory(
     modules: Dict[str, str],
+    options: BashInstallOptions,
     root: str = '~/.bash_modules',
 ):
     """
@@ -94,6 +134,9 @@ def _create_modules_directory(
             source,
             os.path.join(root, name),
         )
+
+    with open(os.path.join(root, options.filename), 'w') as f:
+        f.write(str(options))
 
 
 def _write_bash_profile(root: str):
@@ -135,10 +178,15 @@ def _write_bash_profile(root: str):
 
 if __name__ == '__main__':
     import argparse
+    import sys
     parser = argparse.ArgumentParser()
     parser.add_argument(
         '-l',
         '--list',
+        action='store_true',
+    )
+    parser.add_argument(
+        '--no-install',
         action='store_true',
     )
 
@@ -157,5 +205,11 @@ if __name__ == '__main__':
                     break
 
             print(f'{prefix}:{key}')
-    else: 
-        install_bash_configs()
+
+        sys.exit(0)
+
+    install_bash_configs(
+        options=BashInstallOptions(
+            should_install=not args.no_install
+        ),
+    )
