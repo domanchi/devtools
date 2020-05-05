@@ -12,4 +12,12 @@ alias tmux='tmux -u'    # support utf-8
 
 # Better git commands
 alias gs='git status'
-alias ga='git diff --staged --name-only --diff-filter=ARM | xargs git add'
+function ga() {
+    local files
+    files=$(git diff --staged --name-only --diff-filter=ARM)
+    if [[ "$files" == "" ]]; then
+        git add -u
+    else
+        echo "$files" | xargs git add
+    fi
+}
