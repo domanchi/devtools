@@ -24,6 +24,9 @@ call plug#begin()
     Plug 'junegunn/fzf', {'dir': '~/.fzf', 'do': './install --all'}
     Plug 'junegunn/fzf.vim'
 
+    " Vim zoom, to emulate tmux zoom
+    Plug 'dhruvasagar/vim-zoom'
+
 call plug#end()
 
 " Necessary for NERDCommenter
