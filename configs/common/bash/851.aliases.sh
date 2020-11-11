@@ -18,6 +18,9 @@ function ga() {
     if [[ "$files" == "" ]]; then
         git add -u
     else
-        echo "$files" | xargs git add
+        # The prefix removal handles the case if you're not operating at the
+        # git root level.
+        local prefix=$(realpath --relative-to=`git rev-parse --show-toplevel` .)
+        echo "$files" | sed "s#^$prefix/##g" | xargs git add
     fi
 }
