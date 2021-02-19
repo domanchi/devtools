@@ -17,6 +17,13 @@ function tmux-fix() {
         return 1
     fi
 
+    # This beautiful (long) UNIX command grabs the latest SSH socket.
+    # I found a strange issue where there may be multiple sockets alive,
+    # and the socket that this points to is in a zombified state. As such,
+    # we need to obtain a working socket, which is usually the latest one.
+    socketPath=`find /tmp -type s -user $(whoami) -ls 2>/dev/null | sort --key 8M --key 9n | tail -n 1 | rev | cut -d ' ' -f 1 | rev`
+    export SSH_AUTH_SOCK="$socketPath"
+
     # -e follows symlinks, and checks if file (at the end) exists
     if [[ ! -e ~/.ssh/ssh-auth-sock ]]; then
         ln -sf "$SSH_AUTH_SOCK" ~/.ssh/ssh-auth-sock
