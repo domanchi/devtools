@@ -2,11 +2,13 @@
   roles:
   - role: "python"
   - role: "ripgrep"
+  - role: "fzf"
   vars:
     username: "{{ docker_user | default(ansible_env.USER) }}"
-    home_directory: >-
+    home_prefix: >-
       {{
         "/Users"
         if ansible_distribution == 'MacOSX'
         else "/home"
       }}
+    home_directory: "{{ home_prefix }}/{{ username }}"
