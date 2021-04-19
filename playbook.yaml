@@ -5,6 +5,7 @@
   - role: "python"
   - role: "ripgrep"
   - role: "fzf"
+  - role: "wormhole"
   vars:
     username: "{{ docker_user | default(ansible_env.USER) }}"
     home_prefix: >-

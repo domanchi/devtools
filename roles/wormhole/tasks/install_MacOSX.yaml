@@ -1,0 +1,4 @@
+- name: "Installing magic-wormhole"
+  community.general.homebrew:
+    name: magic-wormhole
+    state: present

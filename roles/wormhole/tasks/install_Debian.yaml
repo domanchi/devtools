@@ -1,0 +1,5 @@
+- name: "Installing magic-wormhole"
+  become: "yes"
+  apt:
+    name: magic-wormhole
+    state: present
