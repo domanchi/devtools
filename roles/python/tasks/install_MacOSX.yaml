@@ -1,0 +1,10 @@
+- name: "Installing pyenv"
+  include_role:
+    name: "vendor/markosamuli.pyenv"
+    vars_from: pyenv-osx
+  when: ansible_distribution == "MacOSX"
+  vars:
+    # Source: https://github.com/markosamuli/ansible-pyenv
+    pyenv_python37_version: "3.7.10"
+    pyenv_python38_version: "3.8.9"
+    pyenv_global: "{{ pyenv_python37_version }} system"

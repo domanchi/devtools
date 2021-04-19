@@ -1,0 +1,4 @@
+# https://galaxy.ansible.com/docs/using/installing.html#installing-multiple-roles-from-a-file
+- src: geerlingguy.homebrew
+- src: markosamuli.pyenv
+- src: avanov.pyenv

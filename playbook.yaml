@@ -1,0 +1,11 @@
+- hosts: "{{ host }}"
+  roles:
+  - role: "python"
+  vars:
+    username: "{{ docker_user | default(ansible_env.USER) }}"
+    home_directory: >-
+      {{
+        "/Users"
+        if ansible_distribution == 'MacOSX'
+        else "/home"
+      }}

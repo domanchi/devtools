@@ -1,0 +1,45 @@
+#!/bin/bash
+# Runs playbook for a specific host.
+# Source: https://stackoverflow.com/a/40866911/13340678
+function main {
+    local username=""
+    while getopts ":hu:" opt; do
+        case ${opt} in
+            u )
+                username="$OPTARG"
+                ;;
+            h )
+                usage
+                return 1
+                ;;
+
+                # TODO: Need to upgrade bash first.
+                # ;&
+            \? )
+                usage
+                return 1
+                ;;
+        esac
+    done
+    shift $((OPTIND -1))
+
+    local host="$1"
+    if [[ -z "$host" ]]; then
+        usage
+        return 1
+    fi
+
+    local params="--extra-vars "host=$host""
+    if [[ ! -z "$username" ]]; then
+        params="$params --extra-vars "docker_user=$username""
+    fi
+
+    venv/bin/ansible-playbook playbook.yaml --inventory hosts.yaml $params
+    return 0
+}
+
+function usage {
+    echo "usage: run-playbook <host>"
+}
+
+main "$@"

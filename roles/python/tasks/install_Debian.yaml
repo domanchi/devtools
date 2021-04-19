@@ -1,0 +1,20 @@
+- name: "Installing pyenv"
+  include_role:
+    name: "vendor/avanov.pyenv"
+  when: ansible_distribution == "Debian" or ansible_distribution == "Ubuntu"
+  vars:
+    # Source: https://github.com/avanov/ansible-galaxy-pyenv
+    pyenv_python_versions:
+      - "3.7.10"
+      - "3.8.9"
+    pyenv_global: "3.7.10 system"
+
+    # No thanks. I'd rather have repo specific virtualenvs.
+    pyenv_virtualenvs: []
+
+    # Need to specify override, since Docker connection (for testing) doesn't have
+    # this magic variable.
+    pyenv_owner: "{{ username }}"
+
+    # This sources pyenv completions in ~/.bashrc
+    pyenv_enable_autocompletion: true
