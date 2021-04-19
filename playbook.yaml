@@ -1,6 +1,7 @@
 - hosts: "{{ host }}"
   roles:
   - role: "python"
+  - role: "ripgrep"
   vars:
     username: "{{ docker_user | default(ansible_env.USER) }}"
     home_directory: >-

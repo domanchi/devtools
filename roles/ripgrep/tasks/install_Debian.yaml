@@ -1,0 +1,5 @@
+- name: "Installing ripgrep"
+  become: "yes"
+  apt:
+    name: ripgrep
+    state: present
