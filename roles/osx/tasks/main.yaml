@@ -1,0 +1,61 @@
+- name: "Setting up dependencies"
+  become: "yes"
+  file:
+    path: /usr/local/share/doc
+    owner: "{{ username }}"
+    state: directory
+    mode: "770"
+
+- name: "Installing homebrew"
+  import_role:
+    name: "vendor/geerlingguy.homebrew"
+  vars:
+    homebrew_installed_packages:
+      # GNU options
+      - coreutils
+      - findutils
+      - gnu-tar
+      - gnu-sed
+      - gnutls
+      - gnu-getopt
+      - grep
+
+      # Why would you keep a super old version?
+      - bash
+
+- name: "Allowing upgraded bash as a login shell"
+  become: "yes"
+  lineinfile:
+    path: /etc/shells
+    line: /usr/local/bin/bash
+    state: present
+
+- name: "Setting bash as a default shell"
+  become: "yes"
+  user:
+    name: "{{ username }}"
+    shell: "/usr/local/bin/bash"
+
+- name: "Setting up bash modules"
+  block:
+  - name: "Creating directories"
+    file:
+      path: "{{ home_directory }}/{{ item }}"
+      state: "directory"
+      mode: "700"
+    loop:
+      - ".bash_modules"
+      - ".bash_scripts"
+
+  - name: "Setting up bash modules"
+    template:
+      src: "{{ item.src }}"
+      dest: "{{ item.dest }}"
+      mode: "600"
+    loop:
+      - src: "templates/path-rewriter.sh"
+        dest: "{{ home_directory }}/.bash_modules/100.path.sh"
+      - src: "templates/gnu-shims.sh"
+        dest: "{{ home_directory }}/.bash_modules/201.gnu-utils.sh"
+      - src: "templates/aliases.sh"
+        dest: "{{ home_directory }}/.bash_modules/851.aliases.sh"

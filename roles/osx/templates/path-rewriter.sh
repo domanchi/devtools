@@ -2,7 +2,7 @@
 #
 # On OSX, the execution order for profile data is:
 #   - /etc/profile
-#     - /etc/bashrc
+#   - /etc/bashrc
 #   - ~/.bash_profile
 #
 # (There's a lot more nuance to this, but this is generally the idea as

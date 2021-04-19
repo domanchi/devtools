@@ -29,12 +29,15 @@ function main {
         return 1
     fi
 
+    # Allow for additional flags to be passed in.
+    shift
+
     local params="--extra-vars "host=$host""
     if [[ ! -z "$username" ]]; then
         params="$params --extra-vars "docker_user=$username""
     fi
 
-    venv/bin/ansible-playbook playbook.yaml --inventory hosts.yaml $params
+    venv/bin/ansible-playbook playbook.yaml --inventory hosts.yaml $params "$@"
     return 0
 }
 

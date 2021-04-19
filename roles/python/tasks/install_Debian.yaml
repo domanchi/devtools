@@ -1,7 +1,6 @@
 - name: "Installing pyenv"
   include_role:
     name: "vendor/avanov.pyenv"
-  when: ansible_distribution == "Debian" or ansible_distribution == "Ubuntu"
   vars:
     # Source: https://github.com/avanov/ansible-galaxy-pyenv
     pyenv_python_versions:

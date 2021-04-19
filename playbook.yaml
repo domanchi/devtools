@@ -1,5 +1,7 @@
 - hosts: "{{ host }}"
   roles:
+  - role: "osx"
+    when: ansible_distribution == "MacOSX"
   - role: "python"
   - role: "ripgrep"
   - role: "fzf"

@@ -3,6 +3,10 @@ development: minimal requirements-dev-minimal.txt
 	venv/bin/pip install -r requirements-dev-minimal.txt
 	venv/bin/pre-commit install
 
+.PHONY: install
+install: minimal
+	bin/run-playbook localhost --ask-become-pass
+
 minimal: venv/bin/activate
 venv/bin/activate: requirements-minimal.txt
 	test -d venv || python3 -m venv venv

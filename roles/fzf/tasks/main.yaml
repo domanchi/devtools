@@ -16,12 +16,12 @@
     file:
       path: "{{ home_directory }}/{{ item }}"
       state: "directory"
-      mode: "777"
+      mode: "700"
     loop:
       - ".bash_modules"
       - ".bash_scripts"
 
-  - name: "Setting up bash scripts"
+  - name: "Setting up bash modules"
     template:
       src: "{{ item.src }}"
       dest: "{{ item.dest }}"
@@ -29,7 +29,7 @@
     loop:
       - src: "templates/bash-module.sh"
         dest: "{{ home_directory }}/.bash_modules/252.fzf.sh"
-        mode: "500"
+        mode: "600"
       - src: "templates/fzf-to-vim.sh"
         dest: "{{ home_directory }}/.bash_scripts/fzf.sh"
         mode: "700"

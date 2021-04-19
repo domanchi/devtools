@@ -2,7 +2,6 @@
   include_role:
     name: "vendor/markosamuli.pyenv"
     vars_from: pyenv-osx
-  when: ansible_distribution == "MacOSX"
   vars:
     # Source: https://github.com/markosamuli/ansible-pyenv
     pyenv_python37_version: "3.7.10"
