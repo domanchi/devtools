@@ -3,6 +3,7 @@
   - role: "osx"
     when: ansible_distribution == "MacOSX"
   - role: "python"
+  - role: "git-tools"
   - role: "ripgrep"
   - role: "fzf"
   - role: "vim"
