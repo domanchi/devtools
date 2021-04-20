@@ -1,0 +1,9 @@
+[core]
+    editor = vim
+[format]
+    # You can do `git log --pretty=short` to override this.
+    pretty = online
+[log]
+    decorate = true
+[alias]
+    alias = ! git config --get-regexp ^alias\\. | sed -e s/^alias\\.// -e s/\\ /\\ =\\ / | sort

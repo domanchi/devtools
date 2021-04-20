@@ -61,3 +61,9 @@
       - "alias ga='add-git-staged-files'"
       - "alias sb='switch-git-branch'"
       - "alias rmb='remove-git-branch'"
+
+- name: "Setting up gitconfig"
+  file:
+    src: "{{ playbook_dir }}/roles/git_tools/files/gitconfig"
+    dest: "{{ home_directory }}/.gitconfig"
+    state: link
