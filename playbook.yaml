@@ -9,6 +9,8 @@
   - role: "vim"
   - role: "wormhole"
   - role: "tmux"
+
+  - role: "vscode"
   vars:
     username: "{{ docker_user | default(ansible_env.USER) }}"
     home_prefix: >-
