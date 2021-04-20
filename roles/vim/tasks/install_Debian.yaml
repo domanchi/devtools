@@ -1,0 +1,5 @@
+- name: "Installing vim"
+  become: "yes"
+  apt:
+    name: vim
+    state: present

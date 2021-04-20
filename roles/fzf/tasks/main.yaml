@@ -30,6 +30,6 @@
       - src: "templates/bash-module.sh"
         dest: "{{ home_directory }}/.bash_modules/252.fzf.sh"
         mode: "600"
-      - src: "templates/fzf-to-vim.sh"
+      - src: "files/fzf-to-vim.sh"
         dest: "{{ home_directory }}/.bash_scripts/fzf.sh"
         mode: "700"

@@ -48,14 +48,23 @@
       - ".bash_scripts"
 
   - name: "Setting up bash modules"
-    template:
-      src: "{{ item.src }}"
+    file:
+      src: "{{ playbook_dir }}/roles/osx/{{ item.src }}"
       dest: "{{ item.dest }}"
-      mode: "600"
+      state: link
     loop:
-      - src: "templates/path-rewriter.sh"
+      - src: "files/path-rewriter.sh"
         dest: "{{ home_directory }}/.bash_modules/100.path.sh"
-      - src: "templates/gnu-shims.sh"
+      - src: "files/gnu-shims.sh"
         dest: "{{ home_directory }}/.bash_modules/201.gnu-utils.sh"
-      - src: "templates/aliases.sh"
+      - src: "files/aliases.sh"
         dest: "{{ home_directory }}/.bash_modules/851.aliases.sh"
+
+# Source: https://apple.stackexchange.com/a/293055
+- name: "Disable spellcheck on Mac Notes"
+  community.general.osx_defaults:
+    domain: com.apple.notes
+    key: NSAutomaticSpellingCorrectionEnabled
+    type: bool
+    value: false
+    state: present

@@ -14,7 +14,7 @@ function! ToggleHex()
     let b:oldbin=&bin
     " set new options
     setlocal binary " make sure it overrides any textwidth, etc.
-    silent :e " this will reload the file without trickeries 
+    silent :e " this will reload the file without trickeries
               "(DOS line endings will be shown entirely )
     let &ft="xxd"
     " set status

@@ -2,27 +2,16 @@
 " This assumes Vim 7.4 "
 """"""""""""""""""""""""
 
-map <F5> :tabp<Enter>
-map <F6> :tabn<Enter>
-map ZA :qa!<Enter>
-map ZS :wqa<Enter>
-map SS :w<Enter>
-
-" Select all
-map <C-a> <ESC>ggVG<Enter>
-
-" noexpandtab means don't replace tabs with spaces.
-set tabstop=8 softtabstop=0 expandtab shiftwidth=4 smarttab
-map RT :%s/\t/    /g
-" RT for ReTab
-
 " add colors in vim
 syntax on
 set colorcolumn=80
 highlight Folded ctermbg=Black
 
-colorscheme monokai
+colorscheme gruvbox
 set background=dark
+
+" fallback color, if gruvbox doesn't work.
+"colorscheme monokai
 
 " split windows that actually make sense
 set splitbelow
@@ -37,11 +26,6 @@ set ruler
 " Folding configs
 set foldmethod=syntax   " because indent acts weird with empty lines
 set nofoldenable        " so files won't open closed
-
-" vimdiff
-map ]q :diffg LO<Enter>
-map ]w :diffg BA<Enter>
-map ]e :diffg RE<Enter>
 
 " Better searching
 set incsearch
