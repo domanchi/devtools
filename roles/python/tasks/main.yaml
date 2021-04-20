@@ -20,3 +20,28 @@
         src: "{{ home_directory }}/pyenv/shims/pip"
         dest: "{{ home_directory }}/pyenv/shims/virtualenv"
         remote_src: yes
+        mode: "700"
+
+# This is useful for switching virtualenvs on directories.
+- name: "Installing aactivator"
+  block:
+    - name: "Creating directories"
+      file:
+        path: "{{ home_directory }}/{{ item }}"
+        state: "directory"
+        mode: "700"
+      loop:
+        - ".bash_modules"
+        - ".bash_scripts"
+
+    - name: "Downloading aactivator"
+      get_url:
+        url: https://raw.githubusercontent.com/Yelp/aactivator/v1.0.1/aactivator.py
+        dest: "{{ home_directory }}/.bash_scripts/aactivator"
+        mode: "700"
+
+    - name: "Installing aactivator"
+      file:
+        src: "{{ playbook_dir }}/roles/python/files/aactivator.sh"
+        dest: "{{ home_directory }}/.bash_modules/600.aactivator.sh"
+        state: link

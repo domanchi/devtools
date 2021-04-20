@@ -1,18 +1,8 @@
-# First, check to see if the aactivator script is installed.
-if [[ ! -f "$HOME/devtools/scripts/aactivator" ]]; then
-    echo "Installing aactivator..."
-    curl -sSL 'https://raw.githubusercontent.com/Yelp/aactivator/master/aactivator.py' \
-        > "$HOME/devtools/scripts/aactivator"
-
-    chmod +x "$HOME/devtools/scripts/aactivator"
-    echo "Install complete!"
-fi
-
 # Then, run it so it is aware of .activate.sh and .deactivate.sh
-eval "$("$HOME/devtools/scripts/aactivator" init)"
+eval "$(~/.bash_scripts/aactivator init)"
 
-function build-venv() {
-    # Usage: build-venv "<name>"
+function virtualenv() {
+    # Usage: virtualenv "<name>"
     # Parameters:
     #   - name: directory name of virtualenv.
 
@@ -32,6 +22,7 @@ function build-venv() {
     fi
 
     local name="$1"
+    shift
 
     # If already in a virtualenv, just use this value.
     if [[ "$VIRTUAL_ENV" ]]; then
@@ -40,6 +31,7 @@ function build-venv() {
         fi
 
         # Get the last part for name.
+        # This is because $VIRTUAL_ENV gives the fully qualified path to the virtualenv root.
         local parts
         IFS='/'
         read -ra parts <<< "$VIRTUAL_ENV"
@@ -53,12 +45,10 @@ function build-venv() {
     fi
 
     if [[ ! -f "$name/bin/activate" ]]; then
-        echo "error: can't find activator file."
-        return 1
+        $(pyenv which virtualenv) "$@" "$name"
     fi
 
     # Creating necessary files.
     ln -s "$name/bin/activate" ./.activate.sh
     echo "deactivate" > ./.deactivate.sh
-    echo "Created!"
 }
