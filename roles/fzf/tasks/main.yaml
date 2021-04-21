@@ -1,0 +1,25 @@
+# Build from source, so that we can get completions.
+- name: "Downloading FZF"
+  git:
+    depth: 1
+    repo: https://github.com/junegunn/fzf.git
+    version: "0.27.0"
+    dest: "{{ home_directory }}/.fzf"
+
+- name: "Installing FZF"
+  command:
+    cmd: "{{ home_directory }}/.fzf/install"
+    creates: "{{ home_directory }}/.fzf.bash"
+
+- name: "Setting up bash modules"
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    mode: "{{ item.mode }}"
+  loop:
+    - src: "templates/bash-module.sh"
+      dest: "{{ home_directory }}/.bash_modules/252.fzf.sh"
+      mode: "600"
+    - src: "files/fzf-to-vim.sh"
+      dest: "{{ home_directory }}/.bash_scripts/fzf.sh"
+      mode: "700"

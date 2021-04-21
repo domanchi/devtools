@@ -1,0 +1,33 @@
+- repo: https://github.com/pre-commit/pre-commit-hooks.git
+  rev: v3.1.0
+  hooks:
+  - id: check-byte-order-marker
+  - id: check-executables-have-shebangs
+  - id: check-merge-conflict
+  - id: debug-statements
+    language_version: python3
+  - id: double-quote-string-fixer
+  - id: end-of-file-fixer
+  - id: mixed-line-ending
+    args: ["--fix=lf"]
+  - id: trailing-whitespace
+
+- repo: https://github.com/adrienverge/yamllint.git
+  rev: v1.23.0
+  hooks:
+  - id: yamllint
+    files: \.(yaml|yml)$
+    types: [file, yaml]
+    entry: yamllint --strict
+
+- repo: local
+  hooks:
+    - id: ansible-lint
+      name: ansible-lint
+      description: Runs ansible-lint.
+      entry: hooks/ansible-lint
+      language: python
+
+      # Turn off pre-commit's internal multiprocessing, since we want to
+      # analyze all files together.
+      require_serial: true

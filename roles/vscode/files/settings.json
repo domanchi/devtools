@@ -1,0 +1,48 @@
+// Place your settings in this file to overwrite the default settings
+{
+    "files.associations": {
+        "*.inc": "php",
+        "*.tmpl": "html"
+    },
+    "files.eol": "\n",
+    "files.exclude": {
+        ".sass-cache/**": true,
+        "node_modules/**": true,
+        "venv/**": true,
+
+        "**/*.swp": true,
+        "**/*.pyc": true,
+        "**/.DS_Store": true,
+        "**/.git": true,
+        "**/__pycache__/**": true
+    },
+
+    "editor.rulers": [100],
+    "explorer.confirmDelete": false,
+
+    "window.zoomLevel": 0,
+    "workbench.startupEditor": "newUntitledFile",
+    "workbench.editorAssociations": [
+        {
+            "viewType": "jupyter.notebook.ipynb",
+            "filenamePattern": "*.ipynb"
+        }
+    ],
+
+    "terimal.integrated.shell.windows": "C:\\Windows\\System32\\bash.exe",
+    "terminal.integrated.shell.osx": "bash",
+
+    /*************************************\
+     * Language specific configurations. *
+    \*************************************/
+    //  Makes the red squiggly lines come up onType, rather than onSave.
+    "php.validate.enable": true,
+    "php.validate.run": "onType",
+
+    "[html]": {
+        "editor.tabSize": 2
+    },
+    "[javascriptreact]": {
+        "editor.tabSize": 2
+    }
+}

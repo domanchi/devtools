@@ -1,0 +1,59 @@
+# NOTE: Assumes python is already installed, with pyenv.
+- name: "Downloading gitfu"
+  git:
+    repo: https://github.com/domanchi/gitfu
+    version: HEAD
+    dest: "{{ home_directory }}/gitfu"
+  tags:
+    # NOTE: This doesn't like an explicit `HEAD` version, but we don't have a solid version,
+    # so let's just ignore this.
+    - skip_ansible_lint
+
+- name: "Installing gitfu"
+  block:
+    - name: "Getting pip binary location"
+      command: "pyenv which pip"
+      register: pip_binary
+      tags:
+        - skip_ansible_lint
+
+    - name: "Installing gitfu"
+      pip:
+        name: "file://{{ home_directory }}/gitfu"
+        executable: "{{ pip_binary.stdout }}"
+        editable: "yes"
+        state: present
+      tags:
+        # NOTE: For some reason, this is failing `risky-file-permissions` when there's no
+        # option to modify (except `umask`, which doesn't work).
+        - skip_ansible_lint
+
+    - name: "Getting installation directory"
+      command: "pyenv which gitfu"
+      register: gitfu_binary
+      tags:
+        - skip_ansible_lint
+
+  environment:
+    PYENV_ROOT: "{{ home_directory }}/.pyenv"
+    PATH: "{{ home_directory }}/.pyenv/bin:{{ ansible_env.PATH }}"
+
+- name: "Setting up bash modules"
+  lineinfile:
+    path: "{{ home_directory }}/.bash_modules/103.gitfu.sh"
+    line: "{{ item }}"
+    state: present
+    create: "yes"
+    mode: "600"
+  loop:
+    - 'eval "$({{ gitfu_binary.stdout }} init --directory "{{ gitfu_binary.stdout | regex_replace("/gitfu$", "") }}")"'
+    - "alias gs='git status'"
+    - "alias ga='add-git-staged-files'"
+    - "alias sb='switch-git-branch'"
+    - "alias rmb='remove-git-branch'"
+
+- name: "Setting up gitconfig"
+  file:
+    src: "{{ playbook_dir }}/roles/git_tools/files/gitconfig"
+    dest: "{{ home_directory }}/.gitconfig"
+    state: link

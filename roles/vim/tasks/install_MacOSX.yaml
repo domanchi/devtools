@@ -1,0 +1,12 @@
+- name: "Upgrading vim"
+  community.general.homebrew:
+    name: vim
+    state: present
+
+- name: "Overriding system vim"
+  lineinfile:
+    path: "{{ home_directory }}/.bash_modules/101.text-editor.sh"
+    line: "export EDITOR='/usr/local/bin/vim'"
+    state: present
+    create: "yes"
+    mode: "600"

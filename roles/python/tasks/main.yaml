@@ -1,0 +1,36 @@
+- include_tasks: install_MacOSX.yaml
+  when: ansible_distribution == "MacOSX"
+
+- include_tasks: install_Debian.yaml
+  when: ansible_distribution == "Debian" or ansible_distribution == "Ubuntu"
+
+- name: "Installing virtualenv"
+  block:
+    - name: "Installing virtualenv"
+      pip:
+        name: virtualenv
+        state: present
+        executable: "{{ item }}"
+      loop:
+        # These should correspond to the Python versions installed
+        - "{{ home_directory }}/.pyenv/versions/3.7.10/bin/pip"
+        - "{{ home_directory }}/.pyenv/versions/3.8.9/bin/pip"
+    - name: "Setting up pyenv shim"
+      copy:
+        src: "{{ home_directory }}/.pyenv/shims/pip"
+        dest: "{{ home_directory }}/.pyenv/shims/virtualenv"
+        remote_src: yes
+        mode: "700"
+
+# This is useful for switching virtualenvs on directories.
+- name: "Downloading aactivator"
+  get_url:
+    url: https://raw.githubusercontent.com/Yelp/aactivator/v1.0.1/aactivator.py
+    dest: "{{ home_directory }}/.bash_scripts/aactivator"
+    mode: "700"
+
+- name: "Installing aactivator"
+  file:
+    src: "{{ playbook_dir }}/roles/python/files/aactivator.sh"
+    dest: "{{ home_directory }}/.bash_modules/600.aactivator.sh"
+    state: link

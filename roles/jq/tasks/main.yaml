@@ -1,0 +1,22 @@
+- include_tasks: install_MacOSX.yaml
+  when: ansible_distribution == "MacOSX"
+
+- include_tasks: install_Debian.yaml
+  when: ansible_distribution == "Debian" or ansible_distribution == "Ubuntu"
+
+- name: "Installing golang (needed for uq)"
+  include_role:
+    name: "roles/golang"
+
+- name: "Installing uq"
+  command:
+    cmd: "go get github.com/solarkennedy/uq"
+    creates: "{{ home_directory }}/go/bin/uq"
+
+- name: "Adding default settings"
+  lineinfile:
+    path: "{{ home_directory }}/.bash_modules/853.jq.sh"
+    line: "alias jq='jq --indent 4 --sort-keys'"
+    state: present
+    create: "yes"
+    mode: "600"

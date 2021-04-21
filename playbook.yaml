@@ -1,0 +1,29 @@
+- hosts: "{{ host }}"
+  roles:
+  - role: "osx"
+    when: ansible_distribution == "MacOSX"
+  - role: "bash"
+  - role: "python"
+  - role: "git_tools"
+
+  # Developer tooling
+  - role: "ripgrep"
+  - role: "fzf"
+  - role: "jq"
+  - role: "vim"
+  - role: "tmux"
+
+  # Misc useful
+  - role: "wormhole"
+
+  # Vendor settings
+  - role: "vscode"
+  vars:
+    username: "{{ docker_user | default(ansible_env.USER) }}"
+    home_prefix: >-
+      {{
+        "/Users"
+        if ansible_distribution == 'MacOSX'
+        else "/home"
+      }}
+    home_directory: "{{ home_prefix }}/{{ username }}"

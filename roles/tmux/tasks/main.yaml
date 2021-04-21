@@ -1,0 +1,56 @@
+- include_tasks: install_MacOSX.yaml
+  when: ansible_distribution == "MacOSX"
+
+- include_tasks: install_Debian.yaml
+  when: ansible_distribution == "Debian" or ansible_distribution == "Ubuntu"
+
+- name: "Setting up tmux configs"
+  block:
+    - name: "Creating directories"
+      file:
+        path: "{{ home_directory }}/{{ item }}"
+        state: directory
+        mode: "700"
+      loop:
+        - ".tmux"
+        - ".tmux/plugins"
+
+    - name: "Symlinking configs"
+      file:
+        src: "{{ playbook_dir }}/roles/tmux/{{ item.src }}"
+        dest: "{{ item.dest }}"
+        state: link
+      loop:
+        - src: "files/tmux-fix.sh"
+          dest: "{{ home_directory }}/.bash_modules/852.tmux-fix.sh"
+        - src: "files/toggle-mouse.sh"
+          dest: "{{ home_directory }}/.bash_scripts/toggle-mouse.sh"
+        - src: "files/tmux.conf"
+          dest: "{{ home_directory }}/.tmux/tmux.conf"
+
+    - name: "Setting up tmux configs"
+      lineinfile:
+        path: "{{ home_directory }}/.tmux.conf"
+        line: "source-file {{ item }}"
+        state: present
+        create: "yes"
+        mode: "600"
+      loop:
+        - "{{ home_directory }}/.tmux/tmux.conf"
+
+- name: "Installing tmux plugin manager"
+  git:
+    repo: https://github.com/tmux-plugins/tpm
+    version: "v3.0.0"
+    dest: "{{ home_directory }}/.tmux/plugins/tpm"
+
+# -s to create a (named) new session
+# -d to immediately detach
+- name: "Installing tmux plugins"
+  command: >-
+    tmux new
+    -d
+    -s transient
+    "{{ home_directory }}/.tmux/plugins/tpm/scripts/install_plugins.sh"
+  tags:
+    - skip_ansible_lint

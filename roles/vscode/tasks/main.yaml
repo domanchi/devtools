@@ -1,0 +1,42 @@
+# Source: https://code.visualstudio.com/docs/getstarted/settings#_settings-file-locations
+- name: "Getting directory for OSX"
+  set_fact:
+    vscode_config_dir: "{{ home_directory }}/Library/Application Support/Code/User"
+  when: ansible_distribution == "MacOSX"
+
+- name: "Getting directory for Ubuntu"
+  set_fact:
+    vscode_config_dir: "{{ home_directory }}/.config/Code/User"
+  when: ansible_distribution == "Debian" or ansible_distribution == "Ubuntu"
+
+- name: "Configuring vscode"
+  file:
+    src: "{{ playbook_dir }}/roles/vscode/{{ item.src }}"
+    dest: "{{ vscode_config_dir }}/{{ item.dest }}"
+    state: link
+  loop:
+    - src: files/settings.json
+      dest: settings.json
+
+    # NOTE: This is a bit harder to do, because of the different operating systems
+    # and their keys (mac has cmd, windows has win). As a result, we have three
+    # possibilities:
+    #   1. Merge the file inline
+    #      We host the configs both in common/ and env/, then merge them through
+    #      ansible.
+    #
+    #   2. Replace the platform-specific keys on the fly.
+    #      We can use ansible template functionality to replace this, if needed.
+    #      However, this is probably a worser option since we'll have slightly
+    #      incorrect finger movements.
+    #
+    #   3. Symlink the common functionality over to User settings, and platform
+    #      specific functionality over to Workspace settings.
+    #      This has a nice handy feature of sync'ed configs, however, this also
+    #      fails in that for every project that you work on, you'll need to run
+    #      some command to create .vscode/, and symlink the necessary file.
+    #
+    # However, I'm going to assume development on the OSX, so we can punt on this
+    # issue till a later time.
+    - src: files/keybindings.json
+      dest: keybindings.json

@@ -1,9 +1,0 @@
-[format]
-    # You can do `git log --pretty=short` to override this.
-    pretty = oneline
-[log]
-    decorate = true
-[alias]
-    alias = ! git config --get-regexp ^alias\\. | sed -e s/^alias\\.// -e s/\\ /\\ =\\ / | sort
-[core]
-    editor = vim

@@ -1,0 +1,61 @@
+- include_tasks: install_MacOSX.yaml
+  when: ansible_distribution == "MacOSX"
+
+- include_tasks: install_Debian.yaml
+  when: ansible_distribution == "Debian" or ansible_distribution == "Ubuntu"
+
+- name: "Creating folders"
+  file:
+    path: "{{ home_directory }}/{{ item }}"
+    state: directory
+    mode: "700"
+  loop:
+    - ".vim"
+    - ".vim/autoload"
+
+- name: "Downloading plugins"
+  get_url:
+    url: "{{ item.src }}"
+    dest: "{{ home_directory }}/{{ item.dest }}"
+    mode: "700"
+  loop:
+    # Get the plugin manager
+    - src: "https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim"
+      dest: ".vim/autoload/plug.vim"
+
+    # Faster file access with FZF integration
+    - src: "https://raw.githubusercontent.com/junegunn/fzf/master/plugin/fzf.vim"
+      dest: ".vim/autoload/fzf.vim"
+
+- name: "Adding colors"
+  file:
+    src: "{{ playbook_dir }}/roles/vim/files/colors"
+    dest: "{{ home_directory }}/.vim/colors"
+    state: link
+
+- name: "Adding configs"
+  lineinfile:
+    path: "{{ home_directory }}/.vim/vimrc"
+    line: "source {{ playbook_dir }}/roles/vim/files/{{ item }}"
+    state: present
+    create: "yes"
+    mode: "600"
+  loop:
+    - plugins.vim
+    - config.vim
+    - functions.vim
+    - hotkeys.vim
+
+- name: "Installing plugins"
+  block:
+    - name: "Installing plugins"
+      command:
+        cmd: "vim +PlugInstall +qall"
+      tags:
+        - skip_ansible_lint
+
+    - name: "Uninstalling unlisted plugins"
+      command:
+        cmd: "vim '+PlugClean!' +qall"
+      tags:
+        - skip_ansible_lint

@@ -1,0 +1,70 @@
+- name: "Setting up dependencies"
+  become: "yes"
+  file:
+    path: /usr/local/share/doc
+    owner: "{{ username }}"
+    state: directory
+    mode: "770"
+
+- name: "Installing homebrew"
+  import_role:
+    name: "vendor/geerlingguy.homebrew"
+  vars:
+    homebrew_installed_packages:
+      # GNU options
+      - coreutils
+      - findutils
+      - gnu-tar
+      - gnu-sed
+      - gnutls
+      - gnu-getopt
+      - grep
+
+      # Why would you keep a super old version?
+      - bash
+
+- name: "Allowing upgraded bash as a login shell"
+  become: "yes"
+  lineinfile:
+    path: /etc/shells
+    line: /usr/local/bin/bash
+    state: present
+
+- name: "Setting bash as a default shell"
+  become: "yes"
+  user:
+    name: "{{ username }}"
+    shell: "/usr/local/bin/bash"
+
+- name: "Setting up bash modules"
+  block:
+  - name: "Creating directories"
+    file:
+      path: "{{ home_directory }}/{{ item }}"
+      state: "directory"
+      mode: "700"
+    loop:
+      - ".bash_modules"
+      - ".bash_scripts"
+
+  - name: "Setting up bash modules"
+    file:
+      src: "{{ playbook_dir }}/roles/osx/{{ item.src }}"
+      dest: "{{ item.dest }}"
+      state: link
+    loop:
+      - src: "files/path-rewriter.sh"
+        dest: "{{ home_directory }}/.bash_modules/100.path.sh"
+      - src: "files/gnu-shims.sh"
+        dest: "{{ home_directory }}/.bash_modules/201.gnu-utils.sh"
+      - src: "files/aliases.sh"
+        dest: "{{ home_directory }}/.bash_modules/851.aliases.sh"
+
+# Source: https://apple.stackexchange.com/a/293055
+- name: "Disable spellcheck on Mac Notes"
+  community.general.osx_defaults:
+    domain: com.apple.notes
+    key: NSAutomaticSpellingCorrectionEnabled
+    type: bool
+    value: false
+    state: present

@@ -1,0 +1,28 @@
+- name: "Setting up directories"
+  file:
+    path: "{{ home_directory }}/{{ item }}"
+    state: "directory"
+    mode: "700"
+  loop:
+    - ".bash_modules"
+    - ".bash_scripts"
+
+- name: "Setting up bash_profile"
+  copy:
+    src: "files/bash_profile.sh"
+    dest: "{{ home_directory }}/.bash_profile"
+
+- name: "Setting up common modules"
+  file:
+    src: "{{ playbook_dir }}/roles/bash/{{ item.src }}"
+    dest: "{{ home_directory }}/.bash_modules/{{ item.dest }}"
+    state: link
+  loop:
+    - src: files/colorful-living.sh
+      dest: 850.colorful-living.sh
+
+    - src: files/aliases.sh
+      dest: 851.aliases.sh
+
+    - src: files/auto-start-ssh-agent.sh
+      dest: 300.ssh-agent.sh

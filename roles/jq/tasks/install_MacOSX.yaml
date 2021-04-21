@@ -1,0 +1,4 @@
+- name: "Installing jq"
+  community.general.homebrew:
+    name: jq
+    state: present
