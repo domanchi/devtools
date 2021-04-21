@@ -1,0 +1,14 @@
+- name: "Installing go"
+  community.general.homebrew:
+    name: golang
+    state: present
+
+- name: "Getting GOROOT"
+  command: brew --prefix golang
+  register: go_root_prefix
+  tags:
+    - skip_ansible_lint
+
+- name: "Setting GOROOT"
+  set_fact:
+    go_root: "{{ go_root_prefix.stdout }}/libexec"

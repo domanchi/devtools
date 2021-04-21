@@ -3,13 +3,20 @@
   - role: "osx"
     when: ansible_distribution == "MacOSX"
   - role: "python"
-  - role: "git-tools"
+  - role: "git_tools"
+  - role: "bash"
+
+  # Developer tooling
   - role: "ripgrep"
   - role: "fzf"
+  - role: "jq"
   - role: "vim"
-  - role: "wormhole"
   - role: "tmux"
 
+  # Misc useful
+  - role: "wormhole"
+
+  # Vendor settings
   - role: "vscode"
   vars:
     username: "{{ docker_user | default(ansible_env.USER) }}"
