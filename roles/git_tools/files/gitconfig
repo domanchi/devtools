@@ -2,7 +2,7 @@
     editor = vim
 [format]
     # You can do `git log --pretty=short` to override this.
-    pretty = online
+    pretty = oneline
 [log]
     decorate = true
 [alias]
