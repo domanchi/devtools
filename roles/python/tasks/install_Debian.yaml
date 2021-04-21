@@ -17,3 +17,6 @@
 
     # This sources pyenv completions in ~/.bashrc
     pyenv_enable_autocompletion: true
+
+    # This complies with the OSX version.
+    pyenv_path: "{{ home_directory }}/.pyenv"

@@ -13,12 +13,12 @@
         executable: "{{ item }}"
       loop:
         # These should correspond to the Python versions installed
-        - "{{ home_directory }}/pyenv/versions/3.7.10/bin/pip"
-        - "{{ home_directory }}/pyenv/versions/3.8.9/bin/pip"
+        - "{{ home_directory }}/.pyenv/versions/3.7.10/bin/pip"
+        - "{{ home_directory }}/.pyenv/versions/3.8.9/bin/pip"
     - name: "Setting up pyenv shim"
       copy:
-        src: "{{ home_directory }}/pyenv/shims/pip"
-        dest: "{{ home_directory }}/pyenv/shims/virtualenv"
+        src: "{{ home_directory }}/.pyenv/shims/pip"
+        dest: "{{ home_directory }}/.pyenv/shims/virtualenv"
         remote_src: yes
         mode: "700"
 
