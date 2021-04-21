@@ -12,8 +12,6 @@
         state: directory
         mode: "700"
       loop:
-        - ".bash_modules"
-        - ".bash_scripts"
         - ".tmux"
         - ".tmux/plugins"
 

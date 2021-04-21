@@ -39,28 +39,18 @@
     PATH: "{{ home_directory }}/.pyenv/bin:{{ ansible_env.PATH }}"
 
 - name: "Setting up bash modules"
-  block:
-  - name: "Creating directories"
-    file:
-      path: "{{ home_directory }}/{{ item }}"
-      state: "directory"
-      mode: "700"
-    loop:
-      - ".bash_modules"
-
-  - name: "Setting up bash modules"
-    lineinfile:
-      path: "{{ home_directory }}/.bash_modules/103.gitfu.sh"
-      line: "{{ item }}"
-      state: present
-      create: "yes"
-      mode: "600"
-    loop:
-      - 'eval "$({{ gitfu_binary.stdout }} init --directory "{{ gitfu_binary.stdout | regex_replace("/gitfu$", "") }}")"'
-      - "alias gs='git status'"
-      - "alias ga='add-git-staged-files'"
-      - "alias sb='switch-git-branch'"
-      - "alias rmb='remove-git-branch'"
+  lineinfile:
+    path: "{{ home_directory }}/.bash_modules/103.gitfu.sh"
+    line: "{{ item }}"
+    state: present
+    create: "yes"
+    mode: "600"
+  loop:
+    - 'eval "$({{ gitfu_binary.stdout }} init --directory "{{ gitfu_binary.stdout | regex_replace("/gitfu$", "") }}")"'
+    - "alias gs='git status'"
+    - "alias ga='add-git-staged-files'"
+    - "alias sb='switch-git-branch'"
+    - "alias rmb='remove-git-branch'"
 
 - name: "Setting up gitconfig"
   file:

@@ -2,9 +2,9 @@
   roles:
   - role: "osx"
     when: ansible_distribution == "MacOSX"
+  - role: "bash"
   - role: "python"
   - role: "git_tools"
-  - role: "bash"
 
   # Developer tooling
   - role: "ripgrep"

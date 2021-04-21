@@ -11,6 +11,6 @@ alias grep='grep --color'
 #   --color          => -G
 #   --human-readable => -h
 #   --ignore         => -I
-# However, if you use this with devtools, GNU should be auto-installed. 
+# However, if you use this with devtools, GNU should be auto-installed.
 alias ls='`which ls` --color -Fh -I "*.pyc"'
 alias la='ls -lA'
