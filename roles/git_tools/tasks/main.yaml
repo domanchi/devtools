@@ -35,8 +35,8 @@
         - skip_ansible_lint
 
   environment:
-    PYENV_ROOT: "{{ home_directory }}/pyenv"
-    PATH: "{{ home_directory }}/pyenv/bin:{{ ansible_env.PATH }}"
+    PYENV_ROOT: "{{ home_directory }}/.pyenv"
+    PATH: "{{ home_directory }}/.pyenv/bin:{{ ansible_env.PATH }}"
 
 - name: "Setting up bash modules"
   block:
@@ -56,7 +56,7 @@
       create: "yes"
       mode: "600"
     loop:
-      - 'eval $(gitfu init --directory "{{ gitfu_binary.stdout | regex_replace("/gitfu$", "") }}")'
+      - 'eval "$({{ gitfu_binary.stdout }} init --directory "{{ gitfu_binary.stdout | regex_replace("/gitfu$", "") }}")"'
       - "alias gs='git status'"
       - "alias ga='add-git-staged-files'"
       - "alias sb='switch-git-branch'"
