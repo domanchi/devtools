@@ -1,7 +1,7 @@
 # Source: https://stackoverflow.com/a/18915067
 SSH_ENV="$HOME/.ssh/environment"
 
-function start-ssh-agent {
+function start-ssh-agent() {
     echo "Initializing new SSH Agent..."
     /usr/bin/ssh-agent | sed 's/^echo/#echo/' > "$SSH_ENV"
     echo "Succeeded!"
@@ -13,7 +13,7 @@ function start-ssh-agent {
 
 # For scenarios where the socket is already passed through (e.g. ssh -A),
 # we don't want to override it.
-if [[ -z "$SSH_AUTH_SOCK" ]]; then
+if [[ `ssh-add -l` == "The agent has no identities." ]]; then
     # Source SSH settings, if applicable
     if [[ -f "$SSH_ENV" ]]; then
         . "$SSH_ENV" > /dev/null
@@ -26,3 +26,4 @@ if [[ -z "$SSH_AUTH_SOCK" ]]; then
 fi
 
 unset SSH_ENV
+unset start_ssh_agent

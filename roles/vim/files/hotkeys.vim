@@ -8,7 +8,7 @@ map SS :w<Enter>
 map <C-a> <ESC>ggVG<Enter>
 
 " noexpandtab means don't replace tabs with spaces.
-set tabstop=8 softtabstop=0 expandtab shiftwidth=4 smarttab
+set tabstop=4 softtabstop=0 expandtab shiftwidth=4 smarttab
 autocmd FileType html setlocal shiftwidth=2 tabstop=2
 
 " RT for ReTab
