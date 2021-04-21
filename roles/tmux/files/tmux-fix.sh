@@ -25,3 +25,5 @@ function tmux-fix() {
 
     return 0
 }
+
+alias tmux="tmux -u"    # support utf-8
