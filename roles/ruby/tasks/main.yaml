@@ -1,0 +1,31 @@
+# NOTE: Normally, this would be after the inclusion of the role below.
+# However, due to https://github.com/zzet/rbenv/pull/142, we expect the
+# next role to fail, so let's just put this here, so that it would be done
+# regardless.
+#
+# TODO: Handle error message gracefully. After all, if we want to run all
+# the roles together, having one role screw up is annoying.
+- name: "Setting up bash modules"
+  lineinfile:
+    path: "{{ home_directory }}/.bash_modules/105.ruby.sh"
+    line: "{{ item }}"
+    create: "yes"
+    mode: "600"
+  loop:
+    - 'export PATH="{{ home_directory }}/.rbenv/bin:$PATH"'
+    - 'export RBENV_ROOT="$HOME/.rbenv"'
+    - 'eval "$(rbenv init -)"'
+
+- name: "Installing ruby via rbenv"
+  include_role:
+    name: "vendor/zzet.rbenv"
+  vars:
+    rbenv_user_profile: false
+    rbenv:
+      env: "user"
+      version: "v1.1.2"
+      default_ruby: "2.7.3"
+      rubies:
+        - version: "2.7.3"
+    rbenv_users:
+      - "{{ username }}"

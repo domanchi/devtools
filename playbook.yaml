@@ -4,6 +4,7 @@
     when: ansible_distribution == "MacOSX"
   - role: "bash"
   - role: "python"
+  - role: "ruby"
   - role: "git_tools"
 
   # Developer tooling
