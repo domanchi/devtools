@@ -13,6 +13,11 @@ function __prompt_command() {
     local GreenBold='\[\e[1;92m\]'
     local RedBold='\[\e[1;91m\]'
 
+    # If in virtualenv, display this.
+    if [[ "$VIRTUAL_ENV" ]]; then
+        PS1+="(`basename "$VIRTUAL_ENV"`) "
+    fi
+
     # Display current user
     PS1+="$Blue\u$ResetColor"
     PS1+="@"
