@@ -1,7 +1,3 @@
-""""""""""""""""""""""""
-" This assumes Vim 7.4 "
-""""""""""""""""""""""""
-
 " add colors in vim
 syntax on
 set colorcolumn=80
@@ -30,3 +26,6 @@ set nofoldenable        " so files won't open closed
 " Better searching
 set incsearch
 set hlsearch
+
+" As of Vim8, we need to set this value for "normal" backspace operations.
+set backspace=indent,eol,start
