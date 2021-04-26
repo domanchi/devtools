@@ -23,6 +23,9 @@
       # Why would you keep a super old version?
       - bash
 
+      # Apparently, you need to install bash-completion specifically.
+      - bash-completion
+
 - name: "Allowing upgraded bash as a login shell"
   become: "yes"
   lineinfile:

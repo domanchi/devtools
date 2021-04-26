@@ -19,3 +19,8 @@ if [[ -x /usr/libexec/path_helper ]]; then
     export PATH=""
     eval $(/usr/libexec/path_helper)
 fi
+
+# Setup auto-completion
+if [[ -f "$(brew --prefix)/etc/bash_completion" ]]; then
+  source "$(brew --prefix)/etc/bash_completion"
+fi
