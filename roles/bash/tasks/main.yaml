@@ -18,6 +18,9 @@
     dest: "{{ home_directory }}/.bash_modules/{{ item.dest }}"
     state: link
   loop:
+    - src: files/bash-config.sh
+      dest: 800.bash-history.sh
+
     - src: files/colorful-living.sh
       dest: 850.colorful-living.sh
 

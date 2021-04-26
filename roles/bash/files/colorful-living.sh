@@ -5,6 +5,11 @@ function __prompt_command() {
     local EXIT="$?"     # this has to come first
     PS1=''
 
+    # shared bash history in all shells
+    history -a
+    history -c
+    history -r
+
     # Colors
     local ResetColor='\[\033[m\]'
     local Yellow='\[\033[33;1m\]'
