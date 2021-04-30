@@ -26,6 +26,9 @@
       # Apparently, you need to install bash-completion specifically.
       - bash-completion
 
+      # Super convenient developer tooling
+      - watch
+
 - name: "Allowing upgraded bash as a login shell"
   become: "yes"
   lineinfile:
@@ -61,13 +64,25 @@
       - src: "files/gnu-shims.sh"
         dest: "{{ home_directory }}/.bash_modules/201.gnu-utils.sh"
       - src: "files/aliases.sh"
-        dest: "{{ home_directory }}/.bash_modules/851.aliases.sh"
+        dest: "{{ home_directory }}/.bash_modules/801.osx-aliases.sh"
 
 # Source: https://apple.stackexchange.com/a/293055
+# NOTE: Super useful information to check out if wanting to automate more defaults:
+#       https://ss64.com/osx/defaults.html. Also, can get domains by doing:
+#       `defaults domains | tr ',' '\n'`
 - name: "Disable spellcheck on Mac Notes"
   community.general.osx_defaults:
     domain: com.apple.notes
     key: NSAutomaticSpellingCorrectionEnabled
     type: bool
     value: false
+    state: present
+
+# Source: https://gist.github.com/mbinna/2357277
+- name: "Avoid creating .DS_Store files on network volumes"
+  community.general.osx_defaults:
+    domain: com.apple.desktopservices
+    key: DSDontWriteNetworkStores
+    type: bool
+    value: true
     state: present
