@@ -9,3 +9,22 @@
     pyenv_python_versions:
       - "{{ pyenv_python37_version }}"
       - "{{ pyenv_python38_version }}"
+
+# These steps are needed, otherwise there's going to be weird SSL issues
+# in Python that you have no idea what it's about. Apparently though,
+# we only need to do this for *one* python, since the default SSL certificates
+# are shared on the system.
+# Source: https://stackoverflow.com/a/44649450/13340678
+- name: "Installing certifi"
+  pip:
+    name: certifi
+    state: present
+  environment:
+    PYENV_VERSION: 3.7.10
+
+- name: "Symlinking certifi's certificate file to local machine"
+  become: "yes"
+  script:
+    cmd: symlink-certifi.py
+  environment:
+    PYENV_VERSION: 3.7.10

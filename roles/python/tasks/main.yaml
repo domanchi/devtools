@@ -22,6 +22,7 @@
         - "{{ home_directory }}/.pyenv/versions/3.8.9/bin/pip"
     - name: "Setting up pyenv shim"
       copy:
+        # This works, since all shims are the same code.
         src: "{{ home_directory }}/.pyenv/shims/pip"
         dest: "{{ home_directory }}/.pyenv/shims/virtualenv"
         remote_src: yes
