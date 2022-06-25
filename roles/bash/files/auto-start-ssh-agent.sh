@@ -44,16 +44,23 @@ elif [[ `cat /tmp/ssh-add.stdout` == "The agent has no identities." ]]; then
     fi
 fi
 
-# Kill zombie ssh-agents
-ps -ef |
-    grep '/usr/bin/ssh-agent' |
-    # Ignore the current process
-    grep -v 'grep' |
-    # Ignore the current agent
-    grep -v ${SSH_AGENT_PID} |
-    # Isolate PIDs and kill them
-    cut -d ' ' -f 2 |
-    xargs kill
+function kill_zombie_agents() {
+    local pids
+    pids=$(ps -ef |
+        grep '/usr/bin/ssh-agent' |
+        # Ignore the current process
+        grep -v 'grep' |
+        # Ignore the current agent
+        grep -v ${SSH_AGENT_PID} |
+        # Isolate PIDs
+        cut -d ' ' -f 2)
+
+    if [[ ! -z "$pids" ]]; then
+        echo "$pids" | xargs kill
+    fi
+}
+
+kill_zombie_agents
 
 unset SSH_ENV
 unset start_ssh_agent
