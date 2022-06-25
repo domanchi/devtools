@@ -5,3 +5,4 @@
 - src: zzet.rbenv
   version: 3.4.7
 - src: gantsign.golang
+- src: gantsign.bat
