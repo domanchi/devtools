@@ -29,3 +29,6 @@
 
     - src: files/auto-start-ssh-agent.sh
       dest: 300.ssh-agent.sh
+
+# TODO: We can reset the PATH (if needed) by re-sourcing it from
+# /etc/environment. Source: https://askubuntu.com/a/386635
