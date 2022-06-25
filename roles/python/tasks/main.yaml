@@ -7,7 +7,13 @@
 - name: "Setting up bash modules"
   lineinfile:
     path: "{{ home_directory }}/.bash_modules/102.python.sh"
-    line: 'eval "$(pyenv init -)"'
+    line: "{{ item }}"
+    state: present
+    create: true
+    mode: '600'
+  loop:
+    - 'eval "$(pyenv init -)"'
+    - 'eval "$(pyenv init --path)"'
 
 - name: "Installing virtualenv"
   block:
@@ -20,12 +26,13 @@
         # These should correspond to the Python versions installed
         - "{{ home_directory }}/.pyenv/versions/3.7.10/bin/pip"
         - "{{ home_directory }}/.pyenv/versions/3.8.9/bin/pip"
+        - "{{ home_directory }}/.pyenv/versions/3.9.13/bin/pip"
     - name: "Setting up pyenv shim"
       copy:
         # This works, since all shims are the same code.
         src: "{{ home_directory }}/.pyenv/shims/pip"
         dest: "{{ home_directory }}/.pyenv/shims/virtualenv"
-        remote_src: yes
+        remote_src: true
         mode: "700"
 
 # This is useful for switching virtualenvs on directories.
