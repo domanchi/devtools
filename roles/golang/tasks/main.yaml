@@ -1,10 +1,9 @@
-- include_tasks: install_MacOSX.yaml
-  when: ansible_distribution == "MacOSX"
-
-- name: "include_tasks for ubuntu"
-  fail:
-    msg: "golang not currently supported for unix"
-  when: ansible_distribution == "Debian" or ansible_distribution == "Ubuntu"
+- name: "Installing golang"
+  include_role:
+    name: "vendor/gantsign.golang"
+  vars:
+    golang_version: "1.18.2"
+    golang_gopath: "{{ go_path }}"
 
 - name: "Setting up go paths"
   lineinfile:
@@ -13,6 +12,6 @@
     create: "yes"
     mode: "600"
   loop:
-    - "export GOROOT='{{ go_root }}'"
+    - "export GOROOT='{{ ansible_local.golang.general.home }}'"
     - "export GOPATH='{{ go_path }}'"
     - 'export PATH="$GOPATH/bin:$GOROOT/bin:$PATH"'

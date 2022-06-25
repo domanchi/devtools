@@ -4,14 +4,13 @@
 - include_tasks: install_Debian.yaml
   when: ansible_distribution == "Debian" or ansible_distribution == "Ubuntu"
 
-- name: "Installing golang (needed for uq)"
-  include_role:
-    name: "roles/golang"
-
 - name: "Installing uq"
   command:
-    cmd: "go get github.com/solarkennedy/uq"
-    creates: "{{ home_directory }}/go/bin/uq"
+    cmd: "go install github.com/solarkennedy/uq@latest"
+    creates: "{{ home_directory }}/.go/bin/uq"
+  environment:
+    # NOTE: This local variable is set by the `golang` role
+    PATH: "{{ ansible_local.golang.general.home }}/bin:{{ ansible_env.PATH }}"
 
 - name: "Adding default settings"
   lineinfile:

@@ -4,3 +4,4 @@
 - src: avanov.pyenv
 - src: zzet.rbenv
   version: 3.4.7
+- src: gantsign.golang
