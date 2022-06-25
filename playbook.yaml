@@ -1,5 +1,6 @@
 - hosts: "{{ host }}"
   roles:
+  - role: "ssh"
   - role: "osx"
     when: ansible_distribution == "MacOSX"
   - role: "bash"
@@ -19,6 +20,7 @@
 
   # Vendor settings
   - role: "vscode"
+
   vars:
     username: "{{ docker_user | default(ansible_env.USER) }}"
     home_prefix: >-
@@ -28,3 +30,7 @@
         else "/home"
       }}
     home_directory: "{{ home_prefix }}/{{ username }}"
+
+  vars_prompt:
+    - name: "ssh_passphrase"
+      prompt: "Enter passphrase for SSH key"
