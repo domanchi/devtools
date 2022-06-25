@@ -8,6 +8,7 @@
 
   - role: "bash"
   - role: "python"
+  - role: "node"
   - role: "golang"      # needed for uq
   - role: "git_tools"
 
