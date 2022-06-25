@@ -13,3 +13,14 @@ $ docker run --rm --name ubuntu -it python3-ubuntu
 # Run playbook in the docker container.
 $ bin/run-playbook -u domanchi ubuntu
 ```
+
+### Ansible Debugging
+
+```bash
+(venv) $ cat example-playbook.yaml
+- hosts: localhost
+  tasks:
+    - debug:
+        msg: "{{ ansible_distribution }}"
+(venv) $ ansible-playbook example-playbook.yaml
+```
