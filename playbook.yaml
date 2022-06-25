@@ -3,6 +3,9 @@
   - role: "ssh"
   - role: "osx"
     when: ansible_distribution == "MacOSX"
+  - role: "wsl"
+    when: is_wsl
+
   - role: "bash"
   - role: "python"
   - role: "golang"      # needed for uq
@@ -23,6 +26,7 @@
 
   vars:
     username: "{{ docker_user | default(ansible_env.USER) }}"
+    is_wsl: false
     home_prefix: >-
       {{
         "/Users"

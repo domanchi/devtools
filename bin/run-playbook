@@ -37,6 +37,11 @@ function main {
         params="$params --extra-vars "docker_user=$username""
     fi
 
+    # Source: https://stackoverflow.com/a/38859331/13340678
+    if grep --ignore-case --quiet microsoft /proc/version; then
+        params="$params --extra-vars "is_wsl=1""
+    fi
+
     venv/bin/ansible-playbook playbook.yaml --inventory hosts.yaml $params "$@"
     return 0
 }
