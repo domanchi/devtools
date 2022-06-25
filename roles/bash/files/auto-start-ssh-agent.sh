@@ -14,14 +14,28 @@ function start_ssh_agent() {
 ssh-add -l >/tmp/ssh-add.stdout 2>/tmp/ssh-add.stderr
 
 if [[ `cat /tmp/ssh-add.stderr` == "Could not open a connection to your authentication agent." ]]; then
-    start_ssh_agent;
+    # Source SSH settings, if applicable.
+    # This needs to be in the current scope.
+    if [[ -f "$SSH_ENV" ]]; then
+        . "$SSH_ENV" > /dev/null
+
+        # If the file is corrupt, regenerate it.
+        ps -ef | grep ${SSH_AGENT_PID} | grep ssh-agent$ > /dev/null || {
+            start_ssh_agent;
+        }
+    else
+        start_ssh_agent;
+    fi
 
 # For scenarios where the socket is already passed through (e.g. ssh -A),
 # we don't want to override it.
 elif [[ `cat /tmp/ssh-add.stdout` == "The agent has no identities." ]]; then
-    # Source SSH settings, if applicable
+    # Source SSH settings, if applicable.
+    # This needs to be in the current scope.
     if [[ -f "$SSH_ENV" ]]; then
         . "$SSH_ENV" > /dev/null
+
+        # If the file is corrupt, regenerate it.
         ps -ef | grep ${SSH_AGENT_PID} | grep ssh-agent$ > /dev/null || {
             start_ssh_agent;
         }
@@ -29,6 +43,17 @@ elif [[ `cat /tmp/ssh-add.stdout` == "The agent has no identities." ]]; then
         start_ssh_agent;
     fi
 fi
+
+# Kill zombie ssh-agents
+ps -ef |
+    grep '/usr/bin/ssh-agent' |
+    # Ignore the current process
+    grep -v 'grep' |
+    # Ignore the current agent
+    grep -v ${SSH_AGENT_PID} |
+    # Isolate PIDs and kill them
+    cut -d ' ' -f 2 |
+    xargs kill
 
 unset SSH_ENV
 unset start_ssh_agent
