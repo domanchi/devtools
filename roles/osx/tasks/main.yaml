@@ -29,6 +29,20 @@
       # Super convenient developer tooling
       - watch
 
+# Homebrew is installed to /opt/homebrew for ARM systems.
+# However, all our scripts assume that it is found in /usr/local.
+# Therefore, link it accordingly.
+- name: "Check that bash is linked accordingly"
+  file:
+    src: "/opt/homebrew/bin/{{ item }}"
+    dest: "/usr/local/bin/{{ item }}"
+    state: hard
+  when: ansible_machine == "arm64"
+  loop:
+    # NOTE: For some reason, linking `brew` doesn't work since the `brew` script
+    # assumes it is run within the brew prefix.
+    - "bash"
+
 - name: "Allowing upgraded bash as a login shell"
   become: "yes"
   lineinfile:

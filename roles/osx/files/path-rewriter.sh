@@ -20,6 +20,11 @@ if [[ -x /usr/libexec/path_helper ]]; then
     eval $(/usr/libexec/path_helper)
 fi
 
+# Handle arm64 OSX distributions
+if [[ -d "/opt/homebrew/" ]]; then
+    export PATH="/opt/homebrew/bin:$PATH"
+fi
+
 # Setup auto-completion
 if [[ -f "$(brew --prefix)/etc/bash_completion" ]]; then
   source "$(brew --prefix)/etc/bash_completion"
