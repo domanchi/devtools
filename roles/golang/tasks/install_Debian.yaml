@@ -1,0 +1,5 @@
+- name: "Installing golang"
+  include_role:
+    name: "vendor/gantsign.golang"
+  vars:
+    golang_gopath: "{{ go_path }}"

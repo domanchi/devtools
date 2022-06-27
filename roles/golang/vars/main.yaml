@@ -1,1 +1,2 @@
 go_path: "{{ home_directory }}/.go"
+golang_version: "1.18.2"
