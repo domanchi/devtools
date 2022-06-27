@@ -22,12 +22,10 @@
 
     "window.zoomLevel": 0,
     "workbench.startupEditor": "newUntitledFile",
-    "workbench.editorAssociations": [
-        {
-            "viewType": "jupyter.notebook.ipynb",
-            "filenamePattern": "*.ipynb"
-        }
-    ],
+    "workbench.colorTheme": "Default Dark+",
+    "workbench.editorAssociations": {
+        "*.ipynb": "jupyter.notebook.ipynb"
+    },
 
     "terimal.integrated.shell.windows": "C:\\Windows\\System32\\bash.exe",
     "terminal.integrated.shell.osx": "bash",
