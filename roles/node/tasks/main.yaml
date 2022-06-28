@@ -4,8 +4,9 @@
 - include_tasks: install_Debian.yaml
   when: ansible_distribution == "Debian" or ansible_distribution == "Ubuntu"
 
-- name: "Setting up go paths"
-  ansible.builtin.template:
-    src: golang.sh.j2
-    dest: "{{ home_directory }}/.bash_modules/104.go.sh"
-    mode: "600"
+- name: "Installing yarn"
+  become: "yes"
+  npm:
+    name: yarn
+    state: present
+    global: "yes"

@@ -6,7 +6,8 @@
     pyenv_python_versions:
       - "3.7.10"
       - "3.8.9"
-    pyenv_global: "3.7.10"
+      - "3.9.13"
+    pyenv_global: "3.9.13"
 
     # No thanks. I'd rather have repo specific virtualenvs.
     pyenv_virtualenvs: []

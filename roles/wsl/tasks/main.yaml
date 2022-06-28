@@ -1,0 +1,19 @@
+- name: "Setting up bash modules"
+  block:
+  - name: "Creating directories"
+    file:
+      path: "{{ home_directory }}/{{ item }}"
+      state: "directory"
+      mode: "700"
+    loop:
+      - ".bash_modules"
+      - ".bash_scripts"
+
+  - name: "Setting up bash modules"
+    file:
+      src: "{{ playbook_dir }}/roles/wsl/{{ item.src }}"
+      dest: "{{ item.dest }}"
+      state: link
+    loop:
+      - src: "files/aliases.sh"
+        dest: "{{ home_directory }}/.bash_modules/801.wsl-aliases.sh"

@@ -1,1 +1,3 @@
 ansible
+bcrypt      # needed for `ssh` role
+pyyaml

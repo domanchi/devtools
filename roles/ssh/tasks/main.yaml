@@ -1,0 +1,13 @@
+- name: "Create directories"
+  file:
+    path: "{{ home_directory }}/.ssh"
+    mode: "700"
+    state: "directory"
+
+- name: "Create SSH Keypair"
+  community.crypto.openssh_keypair:
+    path: "{{ home_directory }}/.ssh/id_ed25519"
+    type: ed25519
+    state: present
+    mode: "600"
+    passphrase: "{{ ssh_passphrase }}"

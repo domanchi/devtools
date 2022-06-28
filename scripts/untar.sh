@@ -17,7 +17,7 @@ function main() {
     local fileType
     if [[ "$extension" == "bz2" ]]; then
         fileType="j"
-    elif [[ "$extension" == "gz" ]]; then
+    elif [[ "$extension" == "gz" ]] || [[ "$extension" == "tgz" ]]; then
         fileType="z"
     elif [[ "$extension" == "xz" ]]; then
         fileType="J"

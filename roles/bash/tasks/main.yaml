@@ -12,6 +12,10 @@
     src: "files/bash_profile.sh"
     dest: "{{ home_directory }}/.bash_profile"
 
+- name: "Installing bat (better cat)"
+  include_role:
+    name: "vendor/gantsign.bat"
+
 - name: "Setting up common modules"
   file:
     src: "{{ playbook_dir }}/roles/bash/{{ item.src }}"
@@ -29,3 +33,6 @@
 
     - src: files/auto-start-ssh-agent.sh
       dest: 300.ssh-agent.sh
+
+# TODO: We can reset the PATH (if needed) by re-sourcing it from
+# /etc/environment. Source: https://askubuntu.com/a/386635

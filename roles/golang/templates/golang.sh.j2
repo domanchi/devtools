@@ -1,0 +1,11 @@
+#!/bin/sh
+
+{{ ansible_managed | comment('plain') }}
+
+export GOROOT='{{ golang_install_dir }}'
+export PATH=$PATH:$GOROOT/bin
+
+{% if go_path not in (None, '') %}
+export GOPATH="{{ go_path }}"
+export PATH=$PATH:$GOPATH/bin
+{% endif %}

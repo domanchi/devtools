@@ -3,12 +3,11 @@
     name: "vendor/markosamuli.pyenv"
   vars:
     # Source: https://github.com/markosamuli/ansible-pyenv
-    pyenv_python37_version: "3.7.10"
-    pyenv_python38_version: "3.8.9"
-    pyenv_global: "{{ pyenv_python37_version }}"
     pyenv_python_versions:
-      - "{{ pyenv_python37_version }}"
-      - "{{ pyenv_python38_version }}"
+      - "3.7.10"
+      - "3.8.9"
+      - "3.9.13"
+    pyenv_global: "3.9.13"
 
 # These steps are needed, otherwise there's going to be weird SSL issues
 # in Python that you have no idea what it's about. Apparently though,

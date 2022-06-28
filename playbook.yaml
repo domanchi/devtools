@@ -1,10 +1,15 @@
 - hosts: "{{ host }}"
   roles:
+  - role: "ssh"
   - role: "osx"
     when: ansible_distribution == "MacOSX"
+  - role: "wsl"
+    when: is_wsl
+
   - role: "bash"
   - role: "python"
-  - role: "ruby"
+  - role: "node"
+  - role: "golang"      # needed for uq
   - role: "git_tools"
 
   # Developer tooling
@@ -13,14 +18,17 @@
   - role: "jq"
   - role: "vim"
   - role: "tmux"
+  - role: "direnv"
 
   # Misc useful
   - role: "wormhole"
 
   # Vendor settings
   - role: "vscode"
+
   vars:
     username: "{{ docker_user | default(ansible_env.USER) }}"
+    is_wsl: false
     home_prefix: >-
       {{
         "/Users"
@@ -28,3 +36,7 @@
         else "/home"
       }}
     home_directory: "{{ home_prefix }}/{{ username }}"
+
+  vars_prompt:
+    - name: "ssh_passphrase"
+      prompt: "Enter passphrase for SSH key"
