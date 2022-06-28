@@ -1,5 +1,4 @@
 - name: "Downloading mkcert"
-  become: "yes"
   homebrew:
     name: mkcert
     state: present

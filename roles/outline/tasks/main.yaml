@@ -11,21 +11,25 @@
     creates: "{{ home_directory }}/.local/share/mkcert"
 
 # NOTE: If this doesn't work, you need to run the terminal as administrator.
-# - name: "Adding custom DNS entry"
-#   become: "yes"
-#   lineinfile:
-#     path: >-
-#       {{
-#         "/mnt/c/Windows/System32/drivers/etc/hosts"
-#         if is_wsl
-#         else "/etc/hosts"
-#       }}
-#     state: present
-#     line: "{{ item }}"
-#   loop:
-#     - "\n# Managed by Ansible"
-#     - "127.0.0.1\tnotebook.local"
-#     - "# End of Ansible managed section"
+- name: "Adding custom DNS entry"
+  become: "yes"
+  lineinfile:
+    path: >-
+      {{
+        "/mnt/c/Windows/System32/drivers/etc/hosts"
+        if is_wsl
+        else "/etc/hosts"
+      }}
+    state: present
+    line: "{{ item }}"
+  loop:
+    - "\n# Managed by Ansible"
+    - "127.0.0.1\tnotebook.local"
+    - "# End of Ansible managed section"
+  tags:
+    # Ansible lint complains about tabs in the line.
+    # However, this is intended.
+    - skip_ansible_lint
 
 # NOTE: If this doesn't work, you need to setup your SSH agent first.
 - name: "Downloading Outline"
