@@ -89,6 +89,10 @@ ROLES = [
         'role': 'wormhole',
         '_require_root': True,
     },
+    {
+        'role': 'outline',
+        '_require_root': True,
+    },
 
     # Vendor settings
     {
