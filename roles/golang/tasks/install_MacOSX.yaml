@@ -1,0 +1,72 @@
+# This is based off gantsign.golang, with OSX support.
+- name: "Create download directory"
+  ansible.builtin.file:
+    state: directory
+    mode: "u=rwx,go=rx"
+    dest: "{{ golang_download_dir }}"
+
+- name: "Download Go language SDK"
+  ansible.builtin.get_url:
+    # NOTE: This is currently written only for the M1 chip.
+    url: "https://storage.googleapis.com/golang/go{{ golang_version }}.darwin-arm64.tar.gz"
+    dest: "{{ golang_download_dir }}/go{{ golang_version }}.darwin-arm64.tar.gz"
+    force: "no"
+    use_proxy: "yes"
+    validate_certs: "yes"
+    mode: "u=rw,go=r"
+
+- name: "Create Go language SDK installation directory"
+  become: "yes"
+  ansible.builtin.file:
+    state: directory
+    owner: root
+    mode: "u=rwx,go=rx"
+    dest: "{{ golang_install_dir }}"
+
+- name: "Install Go language SDK"
+  become: "yes"
+  ansible.builtin.unarchive:
+    src: "{{ golang_download_dir }}/go{{ golang_version }}.darwin-arm64.tar.gz"
+    remote_src: yes
+    extra_opts: "--strip-components=1"
+    dest: "{{ golang_install_dir }}"
+    owner: root
+    creates: "{{ golang_install_dir }}/bin"
+
+# Set Go language SDK environment variables
+- name: "Make sure /etc/profile.d exists"
+  become: "yes"
+  ansible.builtin.file:
+    path: /etc/profile.d
+    state: directory
+    owner: root
+    mode: 'u=rwx,go=rx'
+
+- name: "Export Go language SDK environment variables"
+  become: "yes"
+  ansible.builtin.template:
+    src: golang.sh.j2
+    dest: /etc/profile.d/golang.sh
+    owner: root
+    mode: 'u=rw,go=r'
+
+# Set Go language SDK facts
+- name: "Create Ansible facts.d directory"
+  become: yes
+  ansible.builtin.file:
+    state: directory
+    dest: /etc/ansible/facts.d
+    owner: root
+    mode: 'u=rwx,go=rx'
+
+- name: "Install Go language SDK facts"
+  become: yes
+  ansible.builtin.template:
+    src: facts.j2
+    dest: /etc/ansible/facts.d/golang.fact
+    owner: root
+    mode: 'u=rw,go=r'
+
+- name: "Re-read facts"
+  ansible.builtin.setup:
+    filter: ansible_local
