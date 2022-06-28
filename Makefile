@@ -5,7 +5,7 @@ development: minimal requirements-dev-minimal.txt
 
 .PHONY: install
 install: minimal
-	bin/run-playbook localhost --ask-become-pass
+	bin/run-playbook --host localhost
 
 minimal: venv/bin/activate
 venv/bin/activate: requirements-minimal.txt
