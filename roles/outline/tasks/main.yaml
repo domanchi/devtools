@@ -34,9 +34,9 @@
 # NOTE: If this doesn't work, you need to setup your SSH agent first.
 - name: "Downloading Outline"
   ansible.builtin.git:
-    repo: "git@github.com:domanchi/outline"
+    repo: "git@gitlab.com:domanchi/outline"
     dest: "{{ home_directory }}/outline"
-    version: 654b767d577645360e0ee0881fa4b2b9c25958ea
+    version: 5ae8f99d7cb37bfdecb17179f6861c747607dbfd
   environment:
     GIT_TERMINAL_PROMPT: 0 # reports "terminal prompts disabled" on missing password
 
