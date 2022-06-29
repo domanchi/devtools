@@ -24,7 +24,8 @@
       - bash
 
       # Apparently, you need to install bash-completion specifically.
-      - bash-completion
+      # NOTE: @2 refers to the major version, and v2 is compatible with bash >v4.0
+      - bash-completion@2
 
       # Super convenient developer tooling
       - watch

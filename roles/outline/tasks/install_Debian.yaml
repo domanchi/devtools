@@ -1,0 +1,12 @@
+- name: "Downloading mkcert"
+  become: "yes"
+  ansible.builtin.get_url:
+    url: https://dl.filippo.io/mkcert/latest?for=linux/amd64
+    dest: /usr/local/bin/mkcert
+    mode: "555"
+
+- name: "Downloading mkcert dependencies"
+  become: "yes"
+  ansible.builtin.apt:
+    name: libnss3-tools
+    state: present

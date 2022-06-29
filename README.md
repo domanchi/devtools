@@ -14,8 +14,11 @@ $ sudo apt update
 $ make install
 ```
 
-Alternatively, comment out the roles you don't need to run in `playbook.yaml`, then use the
-above command to install the rest.
+Alternatively, if you need to run specific roles, you can do:
+
+```bash
+$ bin/run-playbook --host localhost --role ssh
+```
 
 ### Gotchas
 

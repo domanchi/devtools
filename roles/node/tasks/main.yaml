@@ -3,3 +3,10 @@
 
 - include_tasks: install_Debian.yaml
   when: ansible_distribution == "Debian" or ansible_distribution == "Ubuntu"
+
+- name: "Installing yarn"
+  become: "yes"
+  npm:
+    name: yarn
+    state: present
+    global: "yes"

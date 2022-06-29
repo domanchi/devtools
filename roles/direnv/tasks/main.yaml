@@ -1,0 +1,28 @@
+- name: "Installing direnv"
+  block:
+    - name: "Checking if direnv is installed"
+      ansible.builtin.command: which direnv
+      changed_when: false
+      register: result
+      failed_when: result.rc != 0 and result.rc != 127
+
+  rescue:
+    - name: "Downloading direnv installation file"
+      ansible.builtin.get_url:
+        url: https://direnv.net/install.sh
+        dest: /tmp/direnv-install.sh
+        mode: "500"
+
+    - name: "Installing direnv"
+      ansible.builtin.command: /tmp/direnv-install.sh
+      changed_when: true
+
+    - name: "Removing direnv installation file"
+      ansible.builtin.file:
+        path: /tmp/direnv-install.sh
+        state: absent
+
+    - name: "Hooking into shell"
+      ansible.builtin.lineinfile:
+        path: "{{ home_directory }}/.bashrc"
+        line: 'eval "$(direnv hook bash)"'

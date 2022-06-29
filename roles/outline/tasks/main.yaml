@@ -1,0 +1,46 @@
+- include_tasks: install_MacOSX.yaml
+  when: ansible_distribution == "MacOSX"
+
+- include_tasks: install_Debian.yaml
+  when: ansible_distribution == "Debian" or ansible_distribution == "Ubuntu"
+
+- name: "Installing mkcert"
+  become: "yes"
+  ansible.builtin.command: mkcert -install
+  args:
+    creates: "{{ home_directory }}/.local/share/mkcert"
+
+# NOTE: If this doesn't work, you need to run the terminal as administrator.
+- name: "Adding custom DNS entry"
+  become: "yes"
+  lineinfile:
+    path: >-
+      {{
+        "/mnt/c/Windows/System32/drivers/etc/hosts"
+        if is_wsl
+        else "/etc/hosts"
+      }}
+    state: present
+    line: "{{ item }}"
+  loop:
+    - "\n# Managed by Ansible"
+    - "127.0.0.1\tnotebook.local"
+    - "# End of Ansible managed section"
+  tags:
+    # Ansible lint complains about tabs in the line.
+    # However, this is intended.
+    - skip_ansible_lint
+
+# NOTE: If this doesn't work, you need to setup your SSH agent first.
+- name: "Downloading Outline"
+  ansible.builtin.git:
+    repo: "git@github.com:domanchi/outline"
+    dest: "{{ home_directory }}/outline"
+    version: 654b767d577645360e0ee0881fa4b2b9c25958ea
+  environment:
+    GIT_TERMINAL_PROMPT: 0 # reports "terminal prompts disabled" on missing password
+
+- name: "Starting Outline server"
+  make:
+    chdir: "{{ home_directory }}/outline"
+    target: up
