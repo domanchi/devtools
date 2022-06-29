@@ -178,8 +178,6 @@ def parse_args() -> argparse.Namespace:
         help='Displays generated YAML file.',
     )
 
-    group = parser.add_mutually_exclusive_group()
-
     def valid_role(name: str) -> Dict[str, Any]:
         for role in ROLES:
             if role['role'] == name:
@@ -187,15 +185,13 @@ def parse_args() -> argparse.Namespace:
 
         raise argparse.ArgumentTypeError(f'Invalid role: {name}')
 
-    group.add_argument(
-        '-r',
-        '--role',
+    parser.add_argument(
+        'role',
         type=valid_role,
-        action='append',
-        default=[],
+        nargs='*',
         help='Specify roles to run (in order).',
     )
-    group.add_argument(
+    parser.add_argument(
         '--from',
         type=valid_role,
         dest='from_role',
