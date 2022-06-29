@@ -53,11 +53,15 @@ function kill_zombie_agents() {
     pids=$(ps -ef |
         grep '/usr/bin/ssh-agent' |
         # Ignore the current process
-        grep -v 'grep' |
-        # Ignore the current agent
-        grep -v ${SSH_AGENT_PID} |
-        # Isolate PIDs
-        cut -d ' ' -f 2)
+        grep -v 'grep')
+
+    if [[ ! -z "$SSH_AGENT_PID" ]]; then
+        # Ignore the current agent.
+        pids=$(echo $pids | grep -v $SSH_AGENT_PID)
+    fi
+
+    # Isolate PIDs
+    pids=$(echo $pids | cut -d ' ' -f 2)
 
     if [[ ! -z "$pids" ]]; then
         echo "$pids" | xargs kill

@@ -42,4 +42,7 @@ function tmux-fix() {
     return 0
 }
 
+# Attempt to fix tmux always. If it's not applicable, this should be a noop.
+tmux-fix >/dev/null
+
 alias tmux="tmux -u"    # support utf-8
