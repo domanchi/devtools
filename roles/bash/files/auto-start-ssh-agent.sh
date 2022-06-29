@@ -27,6 +27,10 @@ if [[ `cat /tmp/ssh-add.stderr` == "Could not open a connection to your authenti
         start_ssh_agent;
     fi
 
+# This may occur if the $SSH_ENV file exists, but the socket it points to doesn't.
+elif [[ `cat /tmp/ssh-add.stderr` == "Error connecting to agent: No such file or directory" ]]; then
+    start_ssh_agent;
+
 # For scenarios where the socket is already passed through (e.g. ssh -A),
 # we don't want to override it.
 elif [[ `cat /tmp/ssh-add.stdout` == "The agent has no identities." ]]; then
