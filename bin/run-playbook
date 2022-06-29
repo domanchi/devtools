@@ -86,6 +86,9 @@ ROLES = [
 
     # Misc useful tools
     {
+        'role': 'age',
+    },
+    {
         'role': 'wormhole',
         '_require_root': True,
     },

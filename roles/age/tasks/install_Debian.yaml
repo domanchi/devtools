@@ -1,0 +1,7 @@
+- name: "Downloading age"
+  command:
+    cmd: "go install filippo.io/age/cmd...@latest"
+    creates: "{{ home_directory }}/.go/bin/age"
+  environment:
+    # NOTE: This local variable is set by the `golang` role
+    PATH: "{{ ansible_local.golang.general.home }}/bin:{{ ansible_env.PATH }}"

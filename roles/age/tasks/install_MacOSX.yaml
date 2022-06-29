@@ -1,0 +1,4 @@
+- name: "Downloading age"
+  homebrew:
+    name: age
+    state: present
