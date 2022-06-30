@@ -39,5 +39,15 @@
         "key": "ctrl+b",
         "command": "-markdown.extension.editing.toggleBold",
         "when": "editorTextFocus && !editorReadonly && editorLangId == 'markdown'"
+    },
+    {
+        "key": "shift+alt+f",
+        "command": "-editor.action.formatDocument.none",
+        "when": "editorTextFocus && !editorHasDocumentFormattingProvider && !editorReadonly"
+    },
+    {
+        "key": "shift+alt+f",
+        "command": "editor.action.reindentlines",
+        "when": "editorTextFocus && !editorHasDocumentFormattingProvider && !editorReadonly"
     }
 ]

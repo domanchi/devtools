@@ -9,22 +9,23 @@
         ".sass-cache/**": true,
         "node_modules/**": true,
         "venv/**": true,
-
         "**/*.swp": true,
         "**/*.pyc": true,
         "**/.DS_Store": true,
         "**/.git": true,
-        "**/__pycache__/**": true
+        "**/__pycache__/**": true,
+        "**/.classpath": true,
+        "**/.project": true,
+        "**/.settings": true,
+        "**/.factorypath": true
     },
 
     "editor.rulers": [100],
     "explorer.confirmDelete": false,
-
-    "window.zoomLevel": 0,
     "workbench.startupEditor": "newUntitledFile",
     "workbench.colorTheme": "Default Dark+",
     "workbench.editorAssociations": {
-        "*.ipynb": "jupyter.notebook.ipynb"
+        "*.ipynb": "jupyter.notebook"
     },
 
     "terimal.integrated.shell.windows": "C:\\Windows\\System32\\bash.exe",
@@ -33,6 +34,13 @@
     /*************************************\
      * Language specific configurations. *
     \*************************************/
+    "[markdown]": {
+        "editor.rulers": [100],
+        "editor.wordWrap": "wordWrapColumn",
+        "editor.quickSuggestions": false
+    },
+
+    //  PHP
     //  Makes the red squiggly lines come up onType, rather than onSave.
     "php.validate.enable": true,
     "php.validate.run": "onType",
@@ -42,5 +50,23 @@
     },
     "[javascriptreact]": {
         "editor.tabSize": 2
+    },
+    "[typescript]": {
+        "editor.tabSize": 2,
+    },
+    "[typescriptreact]": {
+        "editor.tabSize": 2,
+    },
+
+    //  Ruby
+    "[ruby]": {
+        "editor.tabSize": 2
+    },
+    "ruby.useBundler": true,            //  run non-lint commands with `bundle exec`
+    "ruby.useLanguageServer": true,     //  use internal language server
+    "ruby.lint": {
+        "rubocop": {
+            "useBundler": true
+        }
     }
 }
